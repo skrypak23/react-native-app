@@ -1,5 +1,5 @@
 interface ICustomer {
-  id: number;
+  _id: number;
   name: string;
   address: string;
   phone: string;

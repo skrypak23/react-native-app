@@ -6,12 +6,13 @@ const styles = StyleSheet.create({
     maxWidth: '100%',
     alignSelf: 'stretch',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   list: {
     marginTop: 20
   },
-  icon: { color: '#d8a470', fontSize: 20 }
+  icon: { color: '#40a9ff', fontSize: 20, width: 20 },
+  textItem: { fontFamily: 'Acme-Regular', color: '#323232' }
 });
 
 export default styles;

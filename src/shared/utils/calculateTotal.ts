@@ -9,7 +9,7 @@ export default (
   let total = 0;
   if (items.length) {
     total = items.reduce((acc, curr) => {
-      const product = products.find(p => p.id === curr.product_id);
+      const product = products.find(p => p._id === curr.product_id);
       if (product) return acc + product.price * curr.quantity;
       return acc;
     }, 0);

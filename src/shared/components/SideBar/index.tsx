@@ -29,7 +29,7 @@ const SideBar: FC<Props> = ({ navigation }) => (
           return (
             <ListItem button onPress={() => navigation.navigate(item.key)}>
               <Icon type="FontAwesome" name={item.icon} style={styles.icon} />
-              <Text> {item.key}</Text>
+              <Text style={styles.textItem}> {item.key}</Text>
             </ListItem>
           );
         }}

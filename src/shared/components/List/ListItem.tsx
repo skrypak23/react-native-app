@@ -1,105 +1,98 @@
-import React from 'react';
-import {View, Text, StyleSheet, Animated, Dimensions, PanResponder} from 'react-native';
+import React, { PureComponent, ReactNode } from 'react';
+import {
+  View,
+  Text,
+  Animated,
+  Dimensions,
+  PanResponder,
+  PanResponderInstance
+} from 'react-native';
+import { Button, Icon } from 'native-base';
+import styles from './style';
 
-const {width} = Dimensions.get('window');
+type Props<T> = {
+  setScrollEnabled: (enabled: boolean) => void;
+  renderItem: (data: T) => ReactNode;
+  data: T;
+};
+type State = {
+  position: Animated.ValueXY;
+};
 
-export default class ListItem extends React.PureComponent<any, any> {
-    gestureDelay: number;
-    scrollViewEnabled: boolean;
-    panResponder: any;
-    constructor(props: any) {
-        super(props);
+const WIDTH = Dimensions.get('window').width;
 
-        this.gestureDelay = -35;
-        this.scrollViewEnabled = true;
+class ListItem<T> extends PureComponent<Props<T>, State> {
+  private readonly gestureDelay: number;
+  private scrollViewEnabled: boolean;
+  private panResponder: PanResponderInstance;
 
-        const position = new Animated.ValueXY();
-        this.panResponder = PanResponder.create({
-            onStartShouldSetPanResponder: (evt, gestureState) => false,
-            onMoveShouldSetPanResponder: (evt, gestureState) => true,
-            onPanResponderTerminationRequest: (evt, gestureState) => false,
-            onPanResponderMove: (evt, gestureState) => {
-                if (gestureState.dx > 35) {
-                    this.setScrollViewEnabled(false);
-                    let newX = gestureState.dx + this.gestureDelay;
-                    position.setValue({x: newX, y: 0});
-                }
-            },
-            onPanResponderRelease: (evt, gestureState) => {
-                if (gestureState.dx < 150) {
-                    Animated.timing(this.state.position, {
-                        toValue: {x: 0, y: 0},
-                        duration: 150,
-                    }).start(() => {
-                        this.setScrollViewEnabled(true);
-                    });
-                } else {
-                    Animated.timing(this.state.position, {
-                        toValue: {x: width, y: 0},
-                        duration: 300,
-                    }).start(() => {
-                        this.props.success(this.props.text);
-                        this.setScrollViewEnabled(true);
-                    });
-                }
-            },
-        });
+  constructor(props: Props<T>) {
+    super(props);
 
-        this.state = {position};
-    }
+    this.gestureDelay = -35;
+    this.scrollViewEnabled = true;
 
-    setScrollViewEnabled(enabled: boolean) {
-        if (this.scrollViewEnabled !== enabled) {
-            this.props.setScrollEnabled(enabled);
-            this.scrollViewEnabled = enabled;
+    const position = new Animated.ValueXY();
+    this.panResponder = PanResponder.create({
+      onStartShouldSetPanResponder: (event, gestureState) => false,
+      onMoveShouldSetPanResponder: (event, gestureState) => true,
+      onPanResponderTerminationRequest: (event, gestureState) => false,
+      onPanResponderMove: (event, gestureState) => {
+        if (gestureState.dx > 35) {
+          this.setScrollViewEnabled(false);
+          const x = gestureState.dx + this.gestureDelay;
+          position.setValue({ x, y: 0 });
         }
-    }
+      },
+      onPanResponderRelease: (event, gestureState) => {
+        if (gestureState.dx < 150) {
+          Animated.timing(this.state.position, {
+            toValue: { x: 0, y: 0 },
+            duration: 150
+          }).start(() => {
+            this.setScrollViewEnabled(true);
+          });
+        } else {
+          Animated.timing(this.state.position, {
+            toValue: { x: WIDTH, y: 0 },
+            duration: 300
+          }).start(() => {
+            this.setScrollViewEnabled(true);
+          });
+        }
+      }
+    });
 
-    render() {
-        return (
-            <View style={styles.listItem}>
-                <Animated.View style={[this.state.position.getLayout()]} {...this.panResponder.panHandlers}>
-                    <View style={styles.absoluteCell}>
-                        <Text style={styles.absoluteCellText}>DELETE</Text>
-                    </View>
-                    <View style={styles.innerCell}>
-                        <Text>
-                            {this.props.text}
-                        </Text>
-                    </View>
-                </Animated.View>
-            </View>
-        );
+    this.state = { position };
+  }
+
+  setScrollViewEnabled(enabled: boolean) {
+    if (this.scrollViewEnabled !== enabled) {
+      this.props.setScrollEnabled(enabled);
+      this.scrollViewEnabled = enabled;
     }
+  }
+
+  render() {
+    return (
+      <View style={styles.listItem}>
+        <Animated.View
+          style={[this.state.position.getLayout()]}
+          {...this.panResponder.panHandlers}
+        >
+          <View style={styles.absoluteCell}>
+            <Button block info style={styles.button}>
+              <Icon name="md-document" style={styles.icon} />
+            </Button>
+            <Button danger style={styles.button}>
+              <Icon name="trash" style={styles.icon} />
+            </Button>
+          </View>
+          <View style={styles.innerCell}>{this.props.renderItem(this.props.data)}</View>
+        </Animated.View>
+      </View>
+    );
+  }
 }
 
-const styles = StyleSheet.create({
-    listItem: {
-        height: 80,
-        marginLeft: -100,
-        justifyContent: 'center',
-        backgroundColor: 'red',
-    },
-    absoluteCell: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        width: 100,
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-    },
-    absoluteCellText: {
-        margin: 16,
-        color: '#FFF',
-    },
-    innerCell: {
-        width: width,
-        height: 80,
-        marginLeft: 100,
-        backgroundColor: 'yellow',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-});
+export default ListItem;
