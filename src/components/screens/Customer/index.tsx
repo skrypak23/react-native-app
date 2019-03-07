@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { NavigationScreenProp } from 'react-navigation';
-import { Container, Content, Text } from 'native-base';
+import { Card, CardItem, Container, Content, Text, Right, Icon } from 'native-base';
 import BaseHeader from '../../../shared/components/Header';
 import { RootAction, RootState } from '../../../redux/store/types';
 import * as CustomerActions from '../../../redux/customer/actions';
@@ -15,41 +15,35 @@ type Props = {
   customers: ReadonlyArray<ICustomer>;
 };
 
-type Data = {
-  key: string;
-};
-
-const listData = [
-  { key: '1. element' },
-  { key: '2. element' },
-  { key: '3. element' },
-  { key: '4. element' },
-  { key: '5. element' },
-  { key: '6. element' },
-  { key: '7. element' },
-  { key: '8. element' },
-  { key: '9. element' },
-  { key: '10. element' },
-  { key: '11. element' },
-  { key: '12. element' },
-  { key: '13. element' }
-];
-
-class CustomerList extends List<Data> {}
-
 class CustomerScreen extends Component<Props> {
   componentDidMount() {
     this.props.fetchAllCustomers();
   }
 
+  renderItem = (customer: ICustomer) => {
+    const { navigation } = this.props;
+    return (
+      <Card style={{ width: '100%' }}>
+        <CardItem>
+          <Text>{customer.name}</Text>
+          <Right>
+            <Icon
+              name="arrow-forward"
+              onPress={() => navigation.navigate('CustomerDetail', { customer })}
+            />
+          </Right>
+        </CardItem>
+      </Card>
+    );
+  };
+
   render() {
     const { navigation, customers } = this.props;
-    console.log(customers);
     return (
       <Container>
-        <BaseHeader title="Customer" navigation={navigation} />
+        <BaseHeader title="Customers" navigation={navigation} />
         <Content padder>
-          <CustomerList data={listData} />
+          <List<ICustomer> data={customers} renderData={this.renderItem} />
         </Content>
       </Container>
     );

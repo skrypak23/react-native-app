@@ -1,19 +1,62 @@
-import React, { FC } from 'react';
+import React, { Component } from 'react';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 import { NavigationScreenProp } from 'react-navigation';
-import { Container, Content, Text } from 'native-base';
+import { Card, CardItem, Container, Content, Text, Right, Icon } from 'native-base';
 import BaseHeader from '../../../shared/components/Header';
+import { RootAction, RootState } from '../../../redux/store/types';
+import List from '../../../shared/components/List';
+import * as ProductActions from '../../../redux/product/actions';
+import IProduct from '../../../shared/models/Product';
 
 type Props = {
   navigation: NavigationScreenProp<any, any>;
+  fetchAllProducts: () => void;
+  products: ReadonlyArray<IProduct>;
 };
 
-const ProductScreen: FC<Props> = ({ children, navigation }) => (
-  <Container>
-    <BaseHeader title="Product" navigation={navigation} />
-    <Content padder>
-      <Text>Product</Text>
-    </Content>
-  </Container>
-);
+class ProductScreen extends Component<Props> {
+  componentDidMount() {
+    this.props.fetchAllProducts();
+  }
 
-export default ProductScreen;
+  renderItem = (product: IProduct) => {
+    const { navigation } = this.props;
+    console.log('product', product);
+    return product ? (
+      <Card style={{ width: '100%' }}>
+        <CardItem>
+          <Text>{product.name}</Text>
+          <Right>
+            <Icon
+              name="arrow-forward"
+              onPress={() => navigation.navigate('ProductDetail', { product })}
+            />
+          </Right>
+        </CardItem>
+      </Card>
+    ) : null;
+  };
+
+  render() {
+    const { navigation, products } = this.props;
+    return (
+      <Container>
+        <BaseHeader title="Products" navigation={navigation} />
+        <Content padder>
+          <List<IProduct> data={products} renderData={this.renderItem} />
+        </Content>
+      </Container>
+    );
+  }
+}
+
+const mapStateToProps = (state: RootState) => ({ products: state.product.entities });
+const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
+  fetchAllProducts: () => dispatch(ProductActions.fetchProducts())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProductScreen);
