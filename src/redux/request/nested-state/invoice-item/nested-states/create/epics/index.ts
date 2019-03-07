@@ -25,5 +25,5 @@ export const createInvoiceItemsEpic: Epic<RootAction, RootAction, RootState> = (
 ) =>
   action$.pipe(
     filter(isOfType(InvoiceRequest.Types.CREATE_INVOICE_SUCCESS)),
-    switchMap(action => createItems(state$, action.payload.id))
+    switchMap(action => createItems(state$, action.payload._id))
   );

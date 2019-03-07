@@ -27,9 +27,9 @@ export const updateInvoiceEpic: Epic<RootAction, RootAction, RootState> = (
           map(response => UpdateInvoiceActions.editInvoiceSuccess(response)),
           switchMap(action =>
             concat(
-              editItems(state$, action.payload.id),
-              deleteItems(state$, action.payload.id),
-              createItems(state$, action.payload.id),
+              editItems(state$, action.payload._id),
+              deleteItems(state$, action.payload._id),
+              createItems(state$, action.payload._id),
             )
           ),
           catchError(err => of(UpdateInvoiceActions.editInvoiceFailure(err)))

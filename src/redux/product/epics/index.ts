@@ -39,7 +39,7 @@ const createProductEpic: Epic<RootAction, RootAction, RootState> = action$ =>
 const editProductEpic: Epic<RootAction, RootAction, RootState> = action$ =>
   action$.pipe(
     filter(isOfType(PRODUCT_TYPES.EDIT_PRODUCT)),
-    map(action => Action.editProductRequest(action.payload.id, action.payload.product))
+    map(action => Action.editProductRequest(action.payload._id, action.payload.product))
   );
 
 const deleteProductEpic: Epic<RootAction, RootAction, RootState> = action$ =>

@@ -1,7 +1,7 @@
 import { of, from } from 'rxjs';
 import { Epic } from 'redux-observable';
 import { switchMap, map, catchError, filter } from 'rxjs/operators';
-import { ActionType, isOfType } from 'typesafe-actions';
+import { isOfType } from 'typesafe-actions';
 import { RootAction, RootState } from '../../../../../../store/types';
 import InvoiceItemService from '../../../../../../../shared/services/invoice-item.service';
 import { DeleteInvoiceItemTypes, DeleteInvoiceItemActions } from '../actions';
@@ -38,7 +38,7 @@ export const deleteInvoiceItemsEpic: Epic<RootAction, RootAction, RootState> = (
     switchMap(() =>
       from(state$.value.request.invoiceItem.fetch.data).pipe(
         map(data =>
-          DeleteInvoiceItemActions.deleteInvoiceItemRequest(data.id, data.invoice_id)
+          DeleteInvoiceItemActions.deleteInvoiceItemRequest(data._id, data.invoice_id)
         )
       )
     )
