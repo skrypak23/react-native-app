@@ -8,11 +8,14 @@ import { RootAction, RootState } from '../../../redux/store/types';
 import List from '../../../shared/components/List';
 import * as InvoiceActions from '../../../redux/invoice/actions';
 import IInvoice from '../../../shared/models/Invoice';
+import RoundedButton from '../../../shared/components/RoundedButton';
+import { ID } from '../../../shared/typing/records';
 
 type Props = {
   navigation: NavigationScreenProp<any, any>;
   fetchAllInvoices: () => void;
   invoices: ReadonlyArray<IInvoice>;
+  deleteInvoice: (id: ID) => void;
 };
 
 class InvoiceScreen extends Component<Props> {
@@ -37,6 +40,10 @@ class InvoiceScreen extends Component<Props> {
     );
   };
 
+  handleDeleteInvoice = (invoice: IInvoice) => this.props.deleteInvoice(invoice._id);
+  handleEditInvoice = () => {};
+  handlePressButton = () => {};
+
   render() {
     const { navigation, invoices } = this.props;
     console.log(invoices);
@@ -44,8 +51,14 @@ class InvoiceScreen extends Component<Props> {
       <Container>
         <BaseHeader title="Invoices" navigation={navigation} />
         <Content padder>
-          <List<IInvoice> data={invoices} renderData={this.renderItem} />
+          <List<IInvoice>
+            data={invoices}
+            renderData={this.renderItem}
+            onEdit={this.handleEditInvoice}
+            onDelete={this.handleDeleteInvoice}
+          />
         </Content>
+        <RoundedButton onPress={this.handlePressButton} />
       </Container>
     );
   }
@@ -58,6 +71,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
   fetchAllInvoices: () => dispatch(InvoiceActions.fetchInvoices()),
+  deleteInvoice: (id: ID) => dispatch(InvoiceActions.deleteInvoice(id))
 });
 
 export default connect(
