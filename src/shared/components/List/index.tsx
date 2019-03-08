@@ -6,7 +6,7 @@ import styles from './style';
 type Props<T> = {
   data: ReadonlyArray<T>;
   renderData: (data: T) => ReactNode;
-  onEdit: () => void;
+  onEdit: (data: T) => void;
   onDelete: (data: T) => void;
 };
 

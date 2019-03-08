@@ -13,7 +13,7 @@ type Props<T> = {
   setScrollEnabled: (enabled: boolean) => void;
   renderItem: (data: T) => ReactNode;
   data: T;
-  onEdit: () => void;
+  onEdit: (data: T) => void;
   onDelete: (data: T) => void;
 };
 type State = {
@@ -75,6 +75,7 @@ class ListItem<T> extends PureComponent<Props<T>, State> {
   }
 
   handleDelete = () => this.props.onDelete(this.props.data);
+  handleEdit = () => this.props.onEdit(this.props.data);
 
   render() {
     return (
@@ -84,7 +85,7 @@ class ListItem<T> extends PureComponent<Props<T>, State> {
           {...this.panResponder.panHandlers}
         >
           <View style={styles.absoluteCell}>
-            <Button block info style={styles.button}>
+            <Button block info style={styles.button} onPress={this.handleEdit}>
               <Icon name="md-document" style={styles.icon} />
             </Button>
             <Button danger style={styles.button} onPress={this.handleDelete}>
