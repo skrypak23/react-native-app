@@ -13,11 +13,19 @@ import PATHS from '../../shared/paths';
 import CustomerDetailScreen from './CustomerDetail';
 import ProductDetailScreen from './ProductDetail';
 import InvoiceDetailScreen from './InvoiceDetail';
+import CreateCustomerScreen from './CreateCustomer';
+import CreateProductScreen from './CreateProduct';
 
 const StackNavigator = createStackNavigator({
   [PATHS.CustomerDetail]: CustomerDetailScreen,
   [PATHS.ProductDetail]: ProductDetailScreen,
   [PATHS.InvoiceDetail]: InvoiceDetailScreen
+});
+
+const CreateDataNavigator = createStackNavigator({
+  [PATHS.CustomerForm]: CreateCustomerScreen,
+  [PATHS.ProductForm]: CreateProductScreen
+  // [PATHS.InvoiceForm]: InvoiceDetailScreen
 });
 
 const MainNavigator = createDrawerNavigator(
@@ -35,7 +43,8 @@ const MainNavigator = createDrawerNavigator(
 const SwitchNavigator = createSwitchNavigator(
   {
     [PATHS.Drawer]: MainNavigator,
-    [PATHS.Detail]: StackNavigator
+    [PATHS.Detail]: StackNavigator,
+    [PATHS.Form]: CreateDataNavigator
   },
   { initialRouteName: PATHS.Drawer }
 );

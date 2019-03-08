@@ -46,7 +46,6 @@ class InvoiceScreen extends Component<Props> {
 
   render() {
     const { navigation, invoices } = this.props;
-    console.log(invoices);
     return (
       <Container>
         <BaseHeader title="Invoices" navigation={navigation} />

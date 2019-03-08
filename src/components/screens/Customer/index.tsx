@@ -10,12 +10,15 @@ import ICustomer from '../../../shared/models/Customer';
 import List from '../../../shared/components/List';
 import RoundedButton from '../../../shared/components/RoundedButton';
 import { ID } from '../../../shared/typing/records';
+import PATHS from '../../../shared/paths';
 
 type Props = {
   navigation: NavigationScreenProp<any, any>;
   fetchAllCustomers: () => void;
   customers: ReadonlyArray<ICustomer>;
   deleteCustomer: (id: ID) => void;
+  fetchCustomer: (id: ID) => void;
+  resetForm: () => void;
 };
 
 class CustomerScreen extends Component<Props> {
@@ -41,9 +44,16 @@ class CustomerScreen extends Component<Props> {
   };
 
   handleDeleteCustomer = (customer: ICustomer) => this.props.deleteCustomer(customer._id);
-  handleEditCustomer = () => {};
-
-  handlePressButton = () => {};
+  handleEditCustomer = (customer: ICustomer) => {
+    const { fetchCustomer, navigation } = this.props;
+    fetchCustomer(customer._id);
+    navigation.navigate(PATHS.CustomerForm, { isEdit: true });
+  };
+  handlePressButton = () => {
+    const { resetForm, navigation } = this.props;
+    resetForm();
+    navigation.navigate(PATHS.CustomerForm);
+  };
 
   render() {
     const { navigation, customers } = this.props;
@@ -67,7 +77,9 @@ class CustomerScreen extends Component<Props> {
 const mapStateToProps = (state: RootState) => ({ customers: state.customer.entities });
 const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
   fetchAllCustomers: () => dispatch(CustomerActions.fetchCustomers()),
-  deleteCustomer: (id: ID) => dispatch(CustomerActions.deleteCustomer(id))
+  deleteCustomer: (id: ID) => dispatch(CustomerActions.deleteCustomer(id)),
+  fetchCustomer: (id: ID) => dispatch(CustomerActions.fetchCustomer(id)),
+  resetForm: () => dispatch(CustomerActions.resetCustomerLocal())
 });
 
 export default connect(
