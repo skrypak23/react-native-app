@@ -1,7 +1,6 @@
 import React, { PureComponent, ReactNode } from 'react';
 import {
   View,
-  Text,
   Animated,
   Dimensions,
   PanResponder,
@@ -14,6 +13,8 @@ type Props<T> = {
   setScrollEnabled: (enabled: boolean) => void;
   renderItem: (data: T) => ReactNode;
   data: T;
+  onEdit: () => void;
+  onDelete: (data: T) => void;
 };
 type State = {
   position: Animated.ValueXY;
@@ -73,6 +74,8 @@ class ListItem<T> extends PureComponent<Props<T>, State> {
     }
   }
 
+  handleDelete = () => this.props.onDelete(this.props.data);
+
   render() {
     return (
       <View style={styles.listItem}>
@@ -84,7 +87,7 @@ class ListItem<T> extends PureComponent<Props<T>, State> {
             <Button block info style={styles.button}>
               <Icon name="md-document" style={styles.icon} />
             </Button>
-            <Button danger style={styles.button}>
+            <Button danger style={styles.button} onPress={this.handleDelete}>
               <Icon name="trash" style={styles.icon} />
             </Button>
           </View>

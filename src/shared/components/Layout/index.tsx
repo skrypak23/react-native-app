@@ -1,12 +1,15 @@
 import React, { FC } from 'react';
 import { StatusBar } from 'react-native';
-import { Container } from 'native-base';
+import { Root, Container } from 'native-base';
+import { withToast } from '../../hoc';
 
 const Layout: FC = ({ children }) => (
-  <Container>
-    <StatusBar hidden />
-    {children}
-  </Container>
+  <Root>
+    <Container>
+      <StatusBar hidden />
+      {children}
+    </Container>
+  </Root>
 );
 
-export default Layout;
+export default withToast(Layout);

@@ -6,6 +6,8 @@ import styles from './style';
 type Props<T> = {
   data: ReadonlyArray<T>;
   renderData: (data: T) => ReactNode;
+  onEdit: () => void;
+  onDelete: (data: T) => void;
 };
 
 type State<T> = {
@@ -28,12 +30,15 @@ export default class List<T> extends Component<Props<T>, State<T>> {
   setScrollEnabled = (enabled: boolean) => this.setState({ enabled });
 
   renderItem(item: any) {
+    const { onEdit, onDelete } = this.props;
     return (
       <ListItem<T>
         data={item}
         key={item._id}
         setScrollEnabled={this.setScrollEnabled}
         renderItem={this.props.renderData}
+        onEdit={onEdit}
+        onDelete={onDelete}
       />
     );
   }
