@@ -15,7 +15,6 @@ class CustomerService {
       body: JSON.stringify(data.body),
       headers
     };
-
     return from(API.request<ICustomer>(data.url, config));
   }
   static editCustomer(data: TData) {

@@ -18,7 +18,7 @@ const validate = (values: IProduct) => {
   if (!values.name || !values.name.trim()) {
     errors.name = 'name is required';
   }
-  if (!values.price) {
+  if (!values.price || !Number(values.price)) {
     errors.price = 'price is required';
   }
   return errors;
@@ -35,11 +35,15 @@ const BaseForm: FC<Props> = ({
   createProduct,
   editProduct,
   navigation,
-  initialValues
+  initialValues,
+  valid
 }) => {
   const onSubmit = (values: any) => {
     const isEdit = navigation.getParam('isEdit', false);
-    isEdit ? editProduct(initialValues!._id, values) : createProduct(values);
+    const price = Number(values.price);
+    isEdit
+      ? editProduct(initialValues!._id, { ...values, price })
+      : createProduct({ ...values, price });
     navigation.navigate(PATHS.Products);
   };
 
@@ -50,7 +54,7 @@ const BaseForm: FC<Props> = ({
           <FormItem name="name" placeholder="Name" type="default" />
           <FormItem name="price" placeholder="Price" type="decimal-pad" />
         </Form>
-        <Button block primary onPress={handleSubmit(onSubmit)}>
+        <Button block primary onPress={handleSubmit(onSubmit)} disabled={!valid}>
           <Text style={styles.button}>Submit</Text>
         </Button>
       </Content>

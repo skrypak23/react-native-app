@@ -1,4 +1,4 @@
-import { filter, mapTo } from 'rxjs/operators';
+import { filter, map, mapTo, tap } from 'rxjs/operators';
 import { Epic } from 'redux-observable';
 import { isOfType } from 'typesafe-actions';
 import { RootAction, RootState } from '../../store/types';
@@ -82,7 +82,12 @@ const errorAlertEpic: Epic<RootAction, RootAction, RootState> = action$ =>
         IITypes.FETCH_INVOICE_ITEM_BY_ID_FAILURE
       ])
     ),
-    mapTo(AlertActions.setFailureAlert(true, 'Oops, something wrong!'))
+    map(action =>
+      AlertActions.setFailureAlert(
+        true,
+        action.payload.message || 'Oops, something wrong!'
+      )
+    )
   );
 
 export default [createAlertEpic, deleteAlertEpic, updateAlertEpic, errorAlertEpic];

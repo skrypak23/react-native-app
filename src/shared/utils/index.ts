@@ -1,7 +1,8 @@
 import { unionWith, eqBy, reverse, prop, reject, propEq } from 'ramda';
+import {ID} from "../typing/records";
 
 interface IWithID {
-  _id: number;
+  _id: ID;
 }
 
 export function union<T extends IWithID>(payload: Array<T>, entities: ReadonlyArray<T>) {

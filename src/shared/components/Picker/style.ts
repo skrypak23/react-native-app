@@ -2,8 +2,7 @@ import { StyleSheet } from 'react-native';
 
 const style = StyleSheet.create({
   item: {
-    position: 'relative',
-    height: 60
+    position: 'relative'
   },
   error: {
     position: 'absolute',
@@ -12,9 +11,6 @@ const style = StyleSheet.create({
     fontSize: 12,
     color: 'red',
     width: 200
-  },
-  input: {
-    flex: 1
   }
 });
 

@@ -53,9 +53,14 @@ const deleteInvoiceItemEpic: Epic<RootAction, RootAction, RootState> = action$ =
   );
 
 const fetchInvoiceItemsEpic: Epic<RootAction, RootAction, RootState> = action$ =>
+    action$.pipe(
+        filter(isOfType(INVOICE_ITEM_TYPES.FETCH_INVOICE_ITEMS)),
+        map(action => Action.fetchAllInvoiceItemsRequest(action.payload.invoiceId))
+    );
+const resetInvoiceItemEpic: Epic<RootAction, RootAction, RootState> = action$ =>
   action$.pipe(
-    filter(isOfType(INVOICE_ITEM_TYPES.FETCH_INVOICE_ITEMS)),
-    map(action => Action.fetchAllInvoiceItemsRequest(action.payload.invoiceId))
+    filter(isOfType(INVOICE_ITEM_TYPES.RESET_INVOICE_ITEM)),
+    map(() => Action.resetInvoiceItem())
   );
 
 const fetchInvoiceItemByIdEpic: Epic<RootAction, RootAction, RootState> = action$ =>
@@ -74,5 +79,6 @@ export default [
   fetchInvoiceItemByIdEpic,
   fetchInvoiceItemsEpic,
   editInvoiceItemEpic,
-  deleteInvoiceItemEpic
+  deleteInvoiceItemEpic,
+    resetInvoiceItemEpic
 ];

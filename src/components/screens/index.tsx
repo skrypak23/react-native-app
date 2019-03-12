@@ -13,8 +13,9 @@ import PATHS from '../../shared/paths';
 import CustomerDetailScreen from './CustomerDetail';
 import ProductDetailScreen from './ProductDetail';
 import InvoiceDetailScreen from './InvoiceDetail';
-import CreateCustomerScreen from './CreateCustomer';
-import CreateProductScreen from './CreateProduct';
+import CreateCustomerScreen from './ActionCustomer';
+import CreateProductScreen from './ActionProduct';
+import CreateInvoiceScreen from './ActionInvoice';
 
 const StackNavigator = createStackNavigator({
   [PATHS.CustomerDetail]: CustomerDetailScreen,
@@ -24,8 +25,8 @@ const StackNavigator = createStackNavigator({
 
 const CreateDataNavigator = createStackNavigator({
   [PATHS.CustomerForm]: CreateCustomerScreen,
-  [PATHS.ProductForm]: CreateProductScreen
-  // [PATHS.InvoiceForm]: InvoiceDetailScreen
+  [PATHS.ProductForm]: CreateProductScreen,
+  [PATHS.InvoiceForm]: CreateInvoiceScreen
 });
 
 const MainNavigator = createDrawerNavigator(

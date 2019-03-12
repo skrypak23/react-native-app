@@ -13,8 +13,10 @@ type Props<T> = {
   setScrollEnabled: (enabled: boolean) => void;
   renderItem: (data: T) => ReactNode;
   data: T;
-  onEdit: (data: T) => void;
-  onDelete: (data: T) => void;
+  index: number;
+  isEdit?: boolean;
+  onEdit: (data: T, index?: number) => void;
+  onDelete: (data: T, index?: number) => void;
 };
 type State = {
   position: Animated.ValueXY;
@@ -74,8 +76,8 @@ class ListItem<T> extends PureComponent<Props<T>, State> {
     }
   }
 
-  handleDelete = () => this.props.onDelete(this.props.data);
-  handleEdit = () => this.props.onEdit(this.props.data);
+  handleDelete = () => this.props.onDelete(this.props.data, this.props.index);
+  handleEdit = () => this.props.onEdit(this.props.data, this.props.index);
 
   render() {
     return (
@@ -88,7 +90,11 @@ class ListItem<T> extends PureComponent<Props<T>, State> {
             <Button block info style={styles.button} onPress={this.handleEdit}>
               <Icon name="md-document" style={styles.icon} />
             </Button>
-            <Button danger style={styles.button} onPress={this.handleDelete}>
+            <Button
+              danger
+              style={styles.button}
+              onPress={this.handleDelete}
+            >
               <Icon name="trash" style={styles.icon} />
             </Button>
           </View>

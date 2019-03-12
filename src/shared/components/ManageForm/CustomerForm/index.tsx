@@ -18,8 +18,8 @@ const validate = (values: ICustomer) => {
   if (!values.name || !values.name.trim()) {
     errors.name = 'name is required';
   }
-  if (!values.phone || !values.phone.trim()) {
-    errors.phone = 'phone is required';
+  if (!values.phone || !values.phone.match(/^((\+38)+([0-9]){10})$/)) {
+    errors.phone = 'invalid phone number';
   }
   if (!values.address || !values.address.trim()) {
     errors.address = 'address is required';
@@ -38,7 +38,8 @@ const BaseForm: FC<Props> = ({
   createCustomer,
   editCustomer,
   navigation,
-  initialValues
+  initialValues,
+  valid
 }) => {
   const onSubmit = (values: any) => {
     const isEdit = navigation.getParam('isEdit', false);
@@ -50,11 +51,11 @@ const BaseForm: FC<Props> = ({
     <Container>
       <Content>
         <Form style={styles.form}>
-          <FormItem name="name" placeholder="Name" type="default"/>
-          <FormItem name="phone" placeholder="Phone" type="phone-pad"/>
-          <FormItem name="address" placeholder="Address" type="default"/>
+          <FormItem name="name" placeholder="Name" type="default" />
+          <FormItem name="phone" placeholder="Phone" type="phone-pad" />
+          <FormItem name="address" placeholder="Address" type="default" />
         </Form>
-        <Button block primary onPress={handleSubmit(onSubmit)}>
+        <Button block primary onPress={handleSubmit(onSubmit)} disabled={!valid}>
           <Text style={styles.button}>Submit</Text>
         </Button>
       </Content>

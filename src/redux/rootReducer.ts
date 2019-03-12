@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { reducer as form } from 'redux-form';
 import customer from './customer/reducers';
 import product from './product/reducers';
 import invoice from './invoice/reducers';
@@ -12,5 +13,6 @@ export default combineReducers({
   invoice,
   invoiceItem,
   request,
-  alert
+  alert,
+  form
 });

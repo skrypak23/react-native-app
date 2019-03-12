@@ -7,20 +7,27 @@ import BaseHeader from '../../../shared/components/Header';
 import { RootAction, RootState } from '../../../redux/store/types';
 import List from '../../../shared/components/List';
 import * as InvoiceActions from '../../../redux/invoice/actions';
+import * as InvoiceItemActions from '../../../redux/invoice-item/actions';
+import * as CustomerActions from '../../../redux/customer/actions';
 import IInvoice from '../../../shared/models/Invoice';
 import RoundedButton from '../../../shared/components/RoundedButton';
 import { ID } from '../../../shared/typing/records';
+import PATHS from '../../../shared/paths';
 
 type Props = {
   navigation: NavigationScreenProp<any, any>;
   fetchAllInvoices: () => void;
   invoices: ReadonlyArray<IInvoice>;
   deleteInvoice: (id: ID) => void;
+  fetchCustomers: () => void;
+  fetchInvoice: (id: ID) => void;
+  fetchAllInvoiceItems: (invoiceId: ID) => void;
 };
 
 class InvoiceScreen extends Component<Props> {
   componentDidMount() {
     this.props.fetchAllInvoices();
+    this.props.fetchCustomers();
   }
 
   renderItem = (invoice: IInvoice) => {
@@ -41,8 +48,13 @@ class InvoiceScreen extends Component<Props> {
   };
 
   handleDeleteInvoice = (invoice: IInvoice) => this.props.deleteInvoice(invoice._id);
-  handleEditInvoice = () => {};
-  handlePressButton = () => {};
+  handleEditInvoice = (invoice: IInvoice) => {
+    const { fetchInvoice, fetchAllInvoiceItems, navigation } = this.props;
+    fetchInvoice(invoice._id);
+    fetchAllInvoiceItems(invoice._id);
+    navigation.navigate(PATHS.InvoiceForm, { isEdit: true });
+  };
+  handlePressButton = () => this.props.navigation.navigate(PATHS.InvoiceForm);
 
   render() {
     const { navigation, invoices } = this.props;
@@ -70,7 +82,11 @@ const mapStateToProps = (state: RootState) => ({
 });
 const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
   fetchAllInvoices: () => dispatch(InvoiceActions.fetchInvoices()),
-  deleteInvoice: (id: ID) => dispatch(InvoiceActions.deleteInvoice(id))
+  fetchAllInvoiceItems: (invoiceId: ID) =>
+    dispatch(InvoiceItemActions.fetchInvoiceItems(invoiceId)),
+  fetchCustomers: () => dispatch(CustomerActions.fetchCustomers()),
+  deleteInvoice: (id: ID) => dispatch(InvoiceActions.deleteInvoice(id)),
+  fetchInvoice: (id: ID) => dispatch(InvoiceActions.fetchInvoice(id))
 });
 
 export default connect(

@@ -1,4 +1,4 @@
-import { filter, map, mapTo } from 'rxjs/operators';
+import {filter, map, mapTo, tap} from 'rxjs/operators';
 import { Epic } from 'redux-observable';
 import { isOfType } from 'typesafe-actions';
 import { RootAction, RootState } from '../../store/types';

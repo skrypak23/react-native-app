@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, {FC, memo} from 'react';
 import { Input, Item } from 'native-base';
 import { Field } from 'redux-form';
 import { View, Text } from 'react-native';
@@ -16,9 +16,10 @@ type Props = {
   name: string;
   placeholder: string;
   type: KeyboardType;
+  maxLength?: number
 };
 
-const FormItem: FC<Props> = ({ name, placeholder, type }) => {
+const FormItem: FC<Props> = memo(({ name, placeholder, type, maxLength }) => {
   const renderInput = ({
     input: { onChange, value, ...restInput },
     meta: { touched, error },
@@ -26,7 +27,9 @@ const FormItem: FC<Props> = ({ name, placeholder, type }) => {
   }: any) => (
     <View style={styles.item}>
       <Input
+        style={styles.input}
         onChange={onChange}
+        maxLength={maxLength}
         {...restInput}
         {...rest}
         keyboardType={type}
@@ -41,6 +44,6 @@ const FormItem: FC<Props> = ({ name, placeholder, type }) => {
       <Field name={name} component={renderInput} placeholder={placeholder} />
     </Item>
   );
-};
+});
 
 export default FormItem;

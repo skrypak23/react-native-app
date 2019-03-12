@@ -12,6 +12,7 @@ import * as CustomerActions from '../../../redux/customer/actions';
 import { RootAction, RootState } from '../../../redux/store/types';
 import { Dispatch } from 'redux';
 import ICustomer from '../../../shared/models/Customer';
+import {ID} from "../../../shared/typing/records";
 
 type TNavigation = {
   navigation: NavigationScreenProp<any, any>;
@@ -21,7 +22,8 @@ type Props = TNavigation & {
   customers: ReadonlyArray<ICustomer>;
   invoiceItems: ReadonlyArray<IInvoiceItem>;
   fetchAllCustomers: () => void;
-  fetchAllInvoiceItems: (invoiceId: number) => void;
+  resetItems: () => void;
+  fetchAllInvoiceItems: (invoiceId: ID) => void;
 };
 
 class Detail extends Component<Props> {
@@ -31,6 +33,7 @@ class Detail extends Component<Props> {
   });
 
   componentDidMount() {
+    this.props.resetItems();
     const invoice = this.props.navigation.getParam('invoice');
     this.props.fetchAllCustomers();
     invoice && this.props.fetchAllInvoiceItems(invoice._id);
@@ -59,8 +62,8 @@ class Detail extends Component<Props> {
     invoiceItems ? (
       <Tab heading="Invoice Items">
         <Content padder>
-          {invoiceItems.map(item => (
-            <Card key={item._id}>
+          {invoiceItems.map((item, idx) => (
+            <Card key={`${item._id}-${idx}`}>
               <CardItem>
                 <Text>Invoice ID: {item.invoice_id}</Text>
               </CardItem>
@@ -96,8 +99,9 @@ const mapStateToProps = (state: RootState) => ({
 });
 const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
   fetchAllCustomers: () => dispatch(CustomerActions.fetchCustomers()),
-  fetchAllInvoiceItems: (invoiceId: number) =>
-    dispatch(InvoiceItemActions.fetchInvoiceItems(invoiceId))
+  fetchAllInvoiceItems: (invoiceId: ID) =>
+    dispatch(InvoiceItemActions.fetchInvoiceItems(invoiceId)),
+  resetItems: () => dispatch(InvoiceItemActions.resetInvoiceItems())
 });
 
 export default connect(

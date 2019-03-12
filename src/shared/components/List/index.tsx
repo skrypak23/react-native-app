@@ -6,8 +6,9 @@ import styles from './style';
 type Props<T> = {
   data: ReadonlyArray<T>;
   renderData: (data: T) => ReactNode;
-  onEdit: (data: T) => void;
-  onDelete: (data: T) => void;
+  onEdit: (data: T, index?: number) => void;
+  onDelete: (data: T, index?: number) => void;
+  isEdit?: boolean;
 };
 
 type State<T> = {
@@ -29,12 +30,14 @@ export default class List<T> extends Component<Props<T>, State<T>> {
 
   setScrollEnabled = (enabled: boolean) => this.setState({ enabled });
 
-  renderItem(item: any) {
-    const { onEdit, onDelete } = this.props;
+  renderItem(item: any, index: number) {
+    const { onEdit, onDelete, isEdit } = this.props;
     return (
       <ListItem<T>
         data={item}
         key={item._id}
+        index={index}
+        isEdit={isEdit}
         setScrollEnabled={this.setScrollEnabled}
         renderItem={this.props.renderData}
         onEdit={onEdit}
@@ -43,14 +46,14 @@ export default class List<T> extends Component<Props<T>, State<T>> {
     );
   }
 
-  keyExtractor = (item: any) => `${item._id}`;
+  keyExtractor = (item: any, index: number) => (item._id ? `${item._id}` : `${index}`);
 
   render() {
     return (
       <FlatList
         data={this.props.data}
         ItemSeparatorComponent={this.renderSeparator}
-        renderItem={({ item }) => this.renderItem(item)}
+        renderItem={({ item, index }) => this.renderItem(item, index)}
         scrollEnabled={this.state.enabled}
         keyExtractor={this.keyExtractor}
       />

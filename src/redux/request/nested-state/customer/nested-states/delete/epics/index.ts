@@ -11,10 +11,8 @@ type RootAction = ActionType<typeof DeleteCustomerActions>;
 export const deleteCustomersEpic: Epic<RootAction, RootAction, RootState> = action$ =>
   action$.pipe(
     filter(isOfType(DeleteCustomerTypes.DELETE_CUSTOMER_REQUEST)),
-    switchMap(action =>
-      CustomerService.deleteCustomer(action.payload).pipe(
+    switchMap(action => CustomerService.deleteCustomer(action.payload).pipe(
         map(response => DeleteCustomerActions.deleteCustomerSuccess(response)),
         catchError(err => of(DeleteCustomerActions.deleteCustomerFailure(err)))
-      )
-    )
+      ))
   );

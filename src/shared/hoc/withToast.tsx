@@ -2,14 +2,16 @@ import React, { ComponentType } from 'react';
 import { connect } from 'react-redux';
 import { Toast as ToastBase } from 'native-base';
 import { RootState } from '../../redux/store/types';
-import { setSuccessAlert } from '../../redux/alert/actions';
+import { setSuccessAlert, setFailureAlert } from '../../redux/alert/actions';
 
 type Props = {
   alert: {
     success: boolean | null;
+    failure: boolean | null;
     message: string | null;
   };
   setSuccessAlert: (success: boolean | null, message: string | null) => void;
+  setFailureAlert: (success: boolean | null, message: string | null) => void;
 };
 
 const TOAST_DURATION = 3000;
@@ -27,6 +29,15 @@ const withToast = (Component: ComponentType<any>) => {
         });
         setSuccessAlert(null, null);
       }
+      if (alert.failure && alert.message) {
+        ToastBase.show({
+          text: alert.message,
+          buttonText: 'Okay',
+          type: 'danger',
+          duration: TOAST_DURATION
+        });
+        setFailureAlert(null, null);
+      }
     }
 
     render() {
@@ -36,7 +47,7 @@ const withToast = (Component: ComponentType<any>) => {
 
   return connect(
     (state: RootState) => ({ alert: state.alert }),
-    { setSuccessAlert }
+    { setSuccessAlert, setFailureAlert }
   )(Toast);
 };
 

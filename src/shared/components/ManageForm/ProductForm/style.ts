@@ -1,4 +1,6 @@
-const style = {
+import { StyleSheet } from 'react-native';
+
+const style = StyleSheet.create({
   form: {
     marginBottom: 40
   },
@@ -6,5 +8,6 @@ const style = {
     fontSize: 16,
     color: '#fff'
   }
-};
+});
+
 export default style;
