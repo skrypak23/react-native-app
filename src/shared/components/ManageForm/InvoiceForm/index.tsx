@@ -108,7 +108,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
   resetForm: () => dispatch(initialize('invoice', {}))
 });
 
-export default compose(
+export default compose<any>(
   connect(
     mapStateToProps,
     mapDispatchToProps

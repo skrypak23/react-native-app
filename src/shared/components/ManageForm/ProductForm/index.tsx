@@ -71,7 +71,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
     dispatch(ProductActions.editProduct(id, product))
 });
 
-export default compose(
+export default compose<any, any, any>(
   connect(
     mapStateToProps,
     mapDispatchToProps

@@ -32,15 +32,18 @@ class ListItem<T> extends PureComponent<Props<T>, State> {
   constructor(props: Props<T>) {
     super(props);
 
-    this.gestureDelay = -35;
+    this.gestureDelay = -50;
     this.scrollViewEnabled = true;
 
     const position = new Animated.ValueXY();
     this.panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (event, gestureState) => false,
-      onMoveShouldSetPanResponder: (event, gestureState) => true,
-      onPanResponderTerminationRequest: (event, gestureState) => false,
+      onStartShouldSetPanResponder: () => true,
+      onStartShouldSetPanResponderCapture: () => false,
+      onMoveShouldSetPanResponder: (event, gestureState) => gestureState.dx < -50,
+      onMoveShouldSetPanResponderCapture: () => false,
       onPanResponderMove: (event, gestureState) => {
+        event.stopPropagation();
+        console.log(gestureState.dx);
         if (gestureState.dx > 35) {
           this.setScrollViewEnabled(false);
           const x = gestureState.dx + this.gestureDelay;
@@ -51,14 +54,14 @@ class ListItem<T> extends PureComponent<Props<T>, State> {
         if (gestureState.dx < 150) {
           Animated.timing(this.state.position, {
             toValue: { x: 0, y: 0 },
-            duration: 150
+            duration: 150,
           }).start(() => {
             this.setScrollViewEnabled(true);
           });
         } else {
           Animated.timing(this.state.position, {
             toValue: { x: WIDTH, y: 0 },
-            duration: 300
+            duration: 200,
           }).start(() => {
             this.setScrollViewEnabled(true);
           });
@@ -90,11 +93,7 @@ class ListItem<T> extends PureComponent<Props<T>, State> {
             <Button block info style={styles.button} onPress={this.handleEdit}>
               <Icon name="md-document" style={styles.icon} />
             </Button>
-            <Button
-              danger
-              style={styles.button}
-              onPress={this.handleDelete}
-            >
+            <Button danger style={styles.button} onPress={this.handleDelete}>
               <Icon name="trash" style={styles.icon} />
             </Button>
           </View>

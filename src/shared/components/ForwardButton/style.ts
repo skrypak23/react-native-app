@@ -2,13 +2,8 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   button: {
-    width: 60,
-    height: 60,
-    position: 'absolute',
-    bottom: 50,
-    right: 30
-  },
-  icon: {marginLeft: 21}
+    marginLeft: 'auto'
+  }
 });
 
 export default styles;

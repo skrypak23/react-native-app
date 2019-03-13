@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from 'react';
+import React, {Component, PureComponent, ReactNode} from 'react';
 import { FlatList, View } from 'react-native';
 import ListItem from './ListItem';
 import styles from './style';
@@ -16,7 +16,7 @@ type State<T> = {
   data: ReadonlyArray<T>;
 };
 
-export default class List<T> extends Component<Props<T>, State<T>> {
+export default class List<T> extends PureComponent<Props<T>, State<T>> {
   state: State<T> = {
     enabled: true,
     data: this.props.data

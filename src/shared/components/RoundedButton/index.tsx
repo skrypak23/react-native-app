@@ -8,7 +8,7 @@ type Props = {
 
 const RoundedButton: FC<Props> = ({ onPress }) => (
   <Button iconLeft danger style={styles.button} rounded onPress={onPress}>
-    <Icon type="FontAwesome" name="plus" />
+    <Icon type="FontAwesome" name="plus" style={styles.icon}/>
   </Button>
 );
 

@@ -1,5 +1,5 @@
-import React, { Component, FC, ReactNode } from 'react';
-import { Input, Item, Picker } from 'native-base';
+import React, { FC, memo } from 'react';
+import { Item, Picker } from 'native-base';
 import { Field } from 'redux-form';
 import { View, Text } from 'react-native';
 import styles from './style';
@@ -8,8 +8,8 @@ type Props = {
   name: string;
 };
 
-class CustomPicker extends Component<Props> {
-  renderPicker = ({
+const CustomPicker: FC<Props> = memo(({ name, children }) => {
+  const renderPicker = ({
     input: { onChange, value, ...restInput },
     meta: { touched, error },
     ...rest
@@ -24,20 +24,17 @@ class CustomPicker extends Component<Props> {
         {...restInput}
         {...rest}
       >
-        {this.props.children}
+        {children}
       </Picker>
       {touched && error ? <Text style={styles.error}>{error}</Text> : null}
     </View>
   );
 
-  render() {
-    const { name } = this.props;
-    return (
-      <Item>
-        <Field name={name} component={this.renderPicker} />
-      </Item>
-    );
-  }
-}
+  return (
+    <Item>
+      <Field name={name} component={renderPicker} />
+    </Item>
+  );
+});
 
 export default CustomPicker;

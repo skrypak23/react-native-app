@@ -22,7 +22,7 @@ import List from '../../List';
 import Picker from '../../../../shared/components/Picker';
 import IProduct from '../../../models/Product';
 import FormItem from '../../FormItem';
-import  EditItemsForm from '../EditItemsForm';
+import EditItemsForm from '../EditItemsForm';
 import styles from './style';
 
 const validate = (values: IInvoiceItem) => {
@@ -137,7 +137,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
   resetForm: () => dispatch(reset('invoiceItem'))
 });
 
-export default compose(
+export default compose<any>(
   connect(
     mapStateToProps,
     mapDispatchToProps
