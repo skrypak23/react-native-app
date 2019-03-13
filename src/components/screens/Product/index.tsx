@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { NavigationScreenProp } from 'react-navigation';
-import { Card, CardItem, Container, Content, Text, Right, Icon } from 'native-base';
+import { Container, Content, Text } from 'native-base';
 import BaseHeader from '../../../shared/components/Header';
 import { RootAction, RootState } from '../../../redux/store/types';
 import List from '../../../shared/components/List';
@@ -11,6 +11,7 @@ import * as ProductActions from '../../../redux/product/actions';
 import IProduct from '../../../shared/models/Product';
 import { ID } from '../../../shared/typing/records';
 import PATHS from '../../../shared/paths';
+import CardData from '../../../shared/components/Card';
 
 type Props = {
   navigation: NavigationScreenProp<any, any>;
@@ -29,17 +30,13 @@ class ProductScreen extends Component<Props> {
   renderItem = (product: IProduct) => {
     const { navigation } = this.props;
     return product ? (
-      <Card style={{ width: '100%' }}>
-        <CardItem>
-          <Text>{product.name}</Text>
-          <Right>
-            <Icon
-              name="arrow-forward"
-              onPress={() => navigation.navigate('ProductDetail', { product })}
-            />
-          </Right>
-        </CardItem>
-      </Card>
+      <CardData<IProduct>
+        data={product}
+        navigation={navigation}
+        routeName={PATHS.ProductDetail}
+      >
+        <Text>{product.name}</Text>
+      </CardData>
     ) : null;
   };
 

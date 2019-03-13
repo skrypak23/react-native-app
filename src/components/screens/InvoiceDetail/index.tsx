@@ -34,7 +34,7 @@ class Detail extends Component<Props> {
 
   componentDidMount() {
     this.props.resetItems();
-    const invoice = this.props.navigation.getParam('invoice');
+    const invoice = this.props.navigation.getParam('data');
     this.props.fetchAllCustomers();
     invoice && this.props.fetchAllInvoiceItems(invoice._id);
   }
@@ -80,7 +80,7 @@ class Detail extends Component<Props> {
     ) : null;
 
   render() {
-    const invoice = this.props.navigation.getParam('invoice');
+    const invoice = this.props.navigation.getParam('data');
     const { invoiceItems } = this.props;
     return invoice ? (
       <Container>

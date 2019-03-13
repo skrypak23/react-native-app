@@ -18,7 +18,7 @@ class Detail extends Component<Props> {
   });
 
   render() {
-    const product = this.props.navigation.getParam('product');
+    const product = this.props.navigation.getParam('data');
     return product ? (
       <Container>
         <Content padder>
