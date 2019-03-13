@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavigationScreenProp } from 'react-navigation';
 import { Text } from 'react-native';
+import { Dispatch } from 'redux';
 import { Card, CardItem, Container, Content, Tab, Tabs } from 'native-base';
 import GoBackButton from '../../../shared/components/GoBackButton';
 import PATHS from '../../../shared/paths';
@@ -10,9 +11,8 @@ import IInvoiceItem from '../../../shared/models/InvoiceItem';
 import * as InvoiceItemActions from '../../../redux/invoice-item/actions';
 import * as CustomerActions from '../../../redux/customer/actions';
 import { RootAction, RootState } from '../../../redux/store/types';
-import { Dispatch } from 'redux';
 import ICustomer from '../../../shared/models/Customer';
-import {ID} from "../../../shared/typing/records";
+import { ID } from '../../../shared/typing/records';
 
 type TNavigation = {
   navigation: NavigationScreenProp<any, any>;

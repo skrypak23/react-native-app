@@ -52,7 +52,7 @@ const BaseForm: FC<Props> = ({
       <Content>
         <Form style={styles.form}>
           <FormItem name="name" placeholder="Name" type="default" />
-          <FormItem name="phone" placeholder="Phone" type="phone-pad" />
+          <FormItem name="phone" placeholder="+380999999999" type="phone-pad" />
           <FormItem name="address" placeholder="Address" type="default" />
         </Form>
         <Button block primary onPress={handleSubmit(onSubmit)} disabled={!valid}>

@@ -24,6 +24,7 @@ import IProduct from '../../../models/Product';
 import FormItem from '../../FormItem';
 import EditItemsForm from '../EditItemsForm';
 import styles from './style';
+import { findData } from '../../../utils';
 
 const validate = (values: IInvoiceItem) => {
   const errors = {} as any;
@@ -72,13 +73,12 @@ class BaseForm extends Component<Props, State> {
   };
 
   renderItem = (invoiceItem: IInvoiceItem) => {
+    const foundProduct = findData<IProduct>(this.props.products, invoiceItem.product_id);
     return (
-      <Card style={{ width: '100%' }}>
-        <CardItem>
-          <Text>Product ID: {invoiceItem.product_id} - </Text>
-          <Text>quantity: {invoiceItem.quantity}</Text>
-        </CardItem>
-      </Card>
+      <CardItem style={styles.cardItem}>
+        <Text>Product: {foundProduct ? foundProduct.name : null}, </Text>
+        <Text>quantity: {invoiceItem.quantity}</Text>
+      </CardItem>
     );
   };
 
@@ -88,7 +88,7 @@ class BaseForm extends Component<Props, State> {
     const { products, handleSubmit, invoiceItems, valid } = this.props;
     return (
       <Container>
-        <Content>
+        <Content padder>
           <Form style={styles.form}>
             <Picker name="product_id">
               {products.map(product => (

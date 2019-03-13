@@ -19,9 +19,10 @@ class ProductService {
     return from(API.request<IProduct>(data.url, config));
   }
   static editProduct(data: TData) {
+    const { price } = data.body as IProduct;
     const config = {
       method: 'PUT',
-      body: JSON.stringify(data.body),
+      body: JSON.stringify({ price }),
       headers
     };
 

@@ -16,7 +16,6 @@ const reducer = (state: State = initialState, action: Action): State => {
         entities,
       };
     case CUSTOMER_TYPES.DELETE_CUSTOMER_DATA: {
-      console.log(action.payload, '-----');
       const entities = deleteData<ICustomer>(action.payload, state.entities);
       return {
         ...state,

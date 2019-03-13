@@ -1,4 +1,4 @@
-import React, {Component, PureComponent, ReactNode} from 'react';
+import React, { Component, PureComponent, ReactNode } from 'react';
 import { FlatList, View } from 'react-native';
 import ListItem from './ListItem';
 import styles from './style';
@@ -11,52 +11,36 @@ type Props<T> = {
   isEdit?: boolean;
 };
 
-type State<T> = {
-  enabled: boolean;
-  data: ReadonlyArray<T>;
-};
-
-export default class List<T> extends PureComponent<Props<T>, State<T>> {
-  state: State<T> = {
-    enabled: true,
-    data: this.props.data
-  };
-
-  renderSeparator = () => (
+function List<T>({ data, renderData, onEdit, onDelete }: Props<T>) {
+  const renderSeparator = () => (
     <View style={styles.separatorViewStyle}>
       <View style={styles.separatorStyle} />
     </View>
   );
 
-  setScrollEnabled = (enabled: boolean) => this.setState({ enabled });
+  const handleEdit = (item: T, index: number) => () => onEdit(item, index);
+  const handleDelete = (item: T, index: number) => () => onDelete(item, index);
 
-  renderItem(item: any, index: number) {
-    const { onEdit, onDelete, isEdit } = this.props;
-    return (
-      <ListItem<T>
-        data={item}
-        key={item._id}
-        index={index}
-        isEdit={isEdit}
-        setScrollEnabled={this.setScrollEnabled}
-        renderItem={this.props.renderData}
-        onEdit={onEdit}
-        onDelete={onDelete}
-      />
-    );
-  }
+  const renderItem = (item: any, index: number) => (
+    <ListItem
+      onEdit={handleEdit(item, index)}
+      onDelete={handleDelete(item, index)}
+      render={renderData}
+      data={item}
+    />
+  );
 
-  keyExtractor = (item: any, index: number) => (item._id ? `${item._id}` : `${index}`);
+  const keyExtractor = (item: any, index: number) =>
+    item._id ? `${item._id}` : `${index}`;
 
-  render() {
-    return (
-      <FlatList
-        data={this.props.data}
-        ItemSeparatorComponent={this.renderSeparator}
-        renderItem={({ item, index }) => this.renderItem(item, index)}
-        scrollEnabled={this.state.enabled}
-        keyExtractor={this.keyExtractor}
-      />
-    );
-  }
+  return (
+    <FlatList
+      data={data}
+      ItemSeparatorComponent={renderSeparator}
+      renderItem={({ item, index }) => renderItem(item, index)}
+      keyExtractor={keyExtractor}
+    />
+  );
 }
+
+export default List;

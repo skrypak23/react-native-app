@@ -1,49 +1,24 @@
-import { StyleSheet, Dimensions } from 'react-native';
-
-const WIDTH = Dimensions.get('window').width;
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   separatorViewStyle: {
     flex: 1,
     backgroundColor: '#fff'
   },
+  card: {
+    width: '100%'
+  },
   separatorStyle: {
     height: 1,
     backgroundColor: 'transparent'
   },
-  listItem: {
-    marginLeft: -WIDTH,
-    justifyContent: 'center',
-    backgroundColor: '#fff'
-  },
-  absoluteCell: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    width: WIDTH,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center'
-  },
-  absoluteCellText: {
-    margin: 16,
-    color: '#fff'
-  },
-  innerCell: {
-    width: WIDTH,
-    marginLeft: WIDTH,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   button: {
-    height: '100%',
-    width: '50%',
+    height: 70,
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center'
   },
-  icon: { width: 30 }
+  icon: {}
 });
 
 export default styles;

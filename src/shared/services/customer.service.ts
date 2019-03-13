@@ -18,9 +18,10 @@ class CustomerService {
     return from(API.request<ICustomer>(data.url, config));
   }
   static editCustomer(data: TData) {
+    const { phone, address } = data.body as ICustomer;
     const config = {
       method: 'PUT',
-      body: JSON.stringify(data.body),
+      body: JSON.stringify({ phone, address }),
       headers
     };
 

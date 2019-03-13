@@ -3,7 +3,8 @@ import { StyleSheet } from 'react-native';
 const style = StyleSheet.create({
   item: {
     position: 'relative',
-    height: 60
+    height: 60,
+    width: '100%'
   },
   error: {
     position: 'absolute',
@@ -14,7 +15,8 @@ const style = StyleSheet.create({
     width: 200
   },
   input: {
-    flex: 1
+    flex: 1,
+    width: '100%'
   }
 });
 

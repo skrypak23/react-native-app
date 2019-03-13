@@ -7,6 +7,9 @@ const style = StyleSheet.create({
   button: {
     fontSize: 16,
     color: '#fff'
+  },
+  cardItem: {
+    height: 70
   }
 });
 
