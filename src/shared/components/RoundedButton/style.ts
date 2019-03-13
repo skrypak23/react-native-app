@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     position: 'absolute',
-    bottom: 50,
+    bottom: 30,
     right: 30
   },
   icon: {marginLeft: 21}
