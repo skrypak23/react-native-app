@@ -19,7 +19,7 @@ const TOAST_DURATION = 3000;
 const withToast = (Component: ComponentType<any>) => {
   class Toast extends React.Component<Props> {
     componentDidUpdate() {
-      const { alert, setSuccessAlert } = this.props;
+      const { alert, setSuccessAlert, setFailureAlert } = this.props;
       if (alert.success && alert.message) {
         ToastBase.show({
           text: alert.message,
