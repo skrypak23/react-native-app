@@ -9,9 +9,12 @@ import IInvoice from '../../../shared/models/Invoice';
 import IInvoiceItem from '../../../shared/models/InvoiceItem';
 import * as InvoiceItemActions from '../../../redux/invoice-item/actions';
 import * as CustomerActions from '../../../redux/customer/actions';
+import * as ProductActions from '../../../redux/product/actions';
 import { RootAction, RootState } from '../../../redux/store/types';
-import ICustomer from '../../../shared/models/Customer';
 import { ID } from '../../../shared/typing/records';
+import { findData } from '../../../shared/utils';
+import ICustomer from '../../../shared/models/Customer';
+import IProduct from '../../../shared/models/Product';
 
 type TNavigation = {
   navigation: NavigationScreenProp<any, any>;
@@ -19,8 +22,10 @@ type TNavigation = {
 
 type Props = TNavigation & {
   customers: ReadonlyArray<ICustomer>;
+  products: ReadonlyArray<IProduct>;
   invoiceItems: ReadonlyArray<IInvoiceItem>;
   fetchAllCustomers: () => void;
+  fetchAllProducts: () => void;
   resetItems: () => void;
   fetchAllInvoiceItems: (invoiceId: ID) => void;
 };
@@ -35,6 +40,7 @@ class Detail extends Component<Props> {
     this.props.resetItems();
     const invoice = this.props.navigation.getParam('data');
     this.props.fetchAllCustomers();
+    this.props.fetchAllProducts();
     invoice && this.props.fetchAllInvoiceItems(invoice._id);
   }
 
@@ -44,13 +50,15 @@ class Detail extends Component<Props> {
         <Content padder>
           <Card>
             <CardItem header bordered>
-              <Text>Customer ID: {invoice.customer_id}</Text>
+              <Text>
+                Customer: {findData(this.props.customers, invoice.customer_id).name}
+              </Text>
             </CardItem>
             <CardItem header bordered>
               <Text>Discount: {invoice.discount || 0}</Text>
             </CardItem>
             <CardItem header bordered>
-              <Text>Total: {invoice.total}</Text>
+              <Text>Total: {invoice.total.toFixed(2)}</Text>
             </CardItem>
           </Card>
         </Content>
@@ -67,7 +75,9 @@ class Detail extends Component<Props> {
                 <Text>Invoice ID: {item.invoice_id}</Text>
               </CardItem>
               <CardItem>
-                <Text>Product ID: {item.product_id}</Text>
+                <Text>
+                  Product: {findData(this.props.products, item.product_id).name}
+                </Text>
               </CardItem>
               <CardItem>
                 <Text>Quantity: {item.quantity}</Text>
@@ -94,10 +104,12 @@ class Detail extends Component<Props> {
 
 const mapStateToProps = (state: RootState) => ({
   customers: state.customer.entities,
+  products: state.product.entities,
   invoiceItems: state.invoiceItem.entities
 });
 const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
   fetchAllCustomers: () => dispatch(CustomerActions.fetchCustomers()),
+  fetchAllProducts: () => dispatch(ProductActions.fetchProducts()),
   fetchAllInvoiceItems: (invoiceId: ID) =>
     dispatch(InvoiceItemActions.fetchInvoiceItems(invoiceId)),
   resetItems: () => dispatch(InvoiceItemActions.resetInvoiceItems())
