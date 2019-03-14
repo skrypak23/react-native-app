@@ -48,7 +48,7 @@ class Detail extends Component<Props> {
               <Text>Customer ID: {invoice.customer_id}</Text>
             </CardItem>
             <CardItem header bordered>
-              <Text>Discount: {invoice.discount}</Text>
+              <Text>Discount: {invoice.discount || 0}</Text>
             </CardItem>
             <CardItem header bordered>
               <Text>Total: {invoice.total}</Text>
