@@ -8,11 +8,17 @@ import { UpdateCustomerTypes, UpdateCustomerActions } from '../actions';
 
 type RootAction = ActionType<typeof UpdateCustomerActions>;
 
-export const updateCustomersEpic: Epic<RootAction, RootAction, RootState> = action$ =>
+export const updateCustomersEpic: Epic<RootAction, RootAction, RootState> = (
+  action$,
+  state$
+) =>
   action$.pipe(
     filter(isOfType(UpdateCustomerTypes.UPDATE_CUSTOMER_REQUEST)),
     switchMap(action =>
-      CustomerService.editCustomer(action.payload).pipe(
+      CustomerService.editCustomer(
+        action.payload,
+        state$.value.request.customer.fetch.data
+      ).pipe(
         map(response => UpdateCustomerActions.editCustomerSuccess(response)),
         catchError(err => of(UpdateCustomerActions.editCustomerFailure(err)))
       )
