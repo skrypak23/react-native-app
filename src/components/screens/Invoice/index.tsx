@@ -26,6 +26,7 @@ type Props = {
 };
 
 class InvoiceScreen extends Component<Props> {
+  static navigationOptions = { header: null };
   componentDidMount() {
     this.props.fetchAllInvoices();
     this.props.fetchCustomers();

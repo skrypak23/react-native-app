@@ -23,6 +23,7 @@ type Props = {
 };
 
 class CustomerScreen extends Component<Props> {
+  static navigationOptions = { header: null };
   componentDidMount() {
     this.props.fetchAllCustomers();
   }
