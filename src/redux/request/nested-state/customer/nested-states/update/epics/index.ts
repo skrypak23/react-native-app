@@ -15,10 +15,7 @@ export const updateCustomersEpic: Epic<RootAction, RootAction, RootState> = (
   action$.pipe(
     filter(isOfType(UpdateCustomerTypes.UPDATE_CUSTOMER_REQUEST)),
     switchMap(action =>
-      CustomerService.editCustomer(
-        action.payload,
-        state$.value.request.customer.fetch.data
-      ).pipe(
+      CustomerService.editCustomer(action.payload, state$.value.customer.entities).pipe(
         map(response => UpdateCustomerActions.editCustomerSuccess(response)),
         catchError(err => of(UpdateCustomerActions.editCustomerFailure(err)))
       )

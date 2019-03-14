@@ -16,10 +16,7 @@ export const updateProductEpic: Epic<RootAction, RootAction, RootState> = (
   action$.pipe(
     filter(isOfType(UpdateProductTypes.UPDATE_PRODUCT_REQUEST)),
     switchMap(action =>
-      ProductService.editProduct(
-        action.payload,
-        state$.value.request.product.fetch.data
-      ).pipe(
+      ProductService.editProduct(action.payload, state$.value.product.entities).pipe(
         map(response => UpdateProductActions.editProductSuccess(response)),
         catchError(err => of(UpdateProductActions.editProductFailure(err)))
       )
