@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { NavigationScreenProp } from 'react-navigation';
 import { Dispatch } from 'redux';
 import { InvoiceForm, InvoiceItemForm } from '../../../shared/components/ManageForm';
-import PATHS from '../../../shared/paths';
 import GoBackButton from '../../../shared/components/GoBackButton';
 import { Tab, Tabs } from 'native-base';
 import { RootAction } from '../../../redux/store/types';
@@ -23,8 +22,8 @@ type Props = TNavigation & {
 
 class CreateInvoice extends Component<Props> {
   static navigationOptions = ({ navigation }: TNavigation) => ({
-    title: 'Create Invoice',
-    headerLeft: <GoBackButton navigation={navigation} routeName={PATHS.Invoices} />
+    title: navigation.getParam('isEdit') ? 'Edit Invoice' : 'Create Invoice',
+    headerLeft: <GoBackButton navigation={navigation} />
   });
 
   componentDidMount() {

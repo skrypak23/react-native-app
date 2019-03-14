@@ -3,7 +3,6 @@ import { NavigationScreenProp } from 'react-navigation';
 import { Text } from 'react-native';
 import { Card, CardItem, Container, Content } from 'native-base';
 import GoBackButton from '../../../shared/components/GoBackButton';
-import PATHS from '../../../shared/paths';
 
 type TNavigation = {
   navigation: NavigationScreenProp<any, any>;
@@ -14,7 +13,7 @@ type Props = TNavigation & {};
 class Detail extends Component<Props> {
   static navigationOptions = ({ navigation }: TNavigation) => ({
     title: 'Product Details',
-    headerLeft: <GoBackButton navigation={navigation} routeName={PATHS.Products} />
+    headerLeft: <GoBackButton navigation={navigation} />
   });
 
   render() {

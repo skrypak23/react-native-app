@@ -5,7 +5,6 @@ import { Text } from 'react-native';
 import { Dispatch } from 'redux';
 import { Card, CardItem, Container, Content, Tab, Tabs } from 'native-base';
 import GoBackButton from '../../../shared/components/GoBackButton';
-import PATHS from '../../../shared/paths';
 import IInvoice from '../../../shared/models/Invoice';
 import IInvoiceItem from '../../../shared/models/InvoiceItem';
 import * as InvoiceItemActions from '../../../redux/invoice-item/actions';
@@ -29,7 +28,7 @@ type Props = TNavigation & {
 class Detail extends Component<Props> {
   static navigationOptions = ({ navigation }: TNavigation) => ({
     title: 'Invoice Details',
-    headerLeft: <GoBackButton navigation={navigation} routeName={PATHS.Invoices} />
+    headerLeft: <GoBackButton navigation={navigation} />
   });
 
   componentDidMount() {

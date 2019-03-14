@@ -11,7 +11,7 @@ type Props = TNavigation & {};
 
 class CreateCustomer extends Component<Props> {
   static navigationOptions = ({ navigation }: TNavigation) => ({
-    title: 'Create Customer',
+    title: navigation.getParam('isEdit') ? 'Edit Customer' : 'Create Customer',
     headerLeft: <GoBackButton navigation={navigation} />
   });
   render() {
