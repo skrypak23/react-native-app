@@ -1,5 +1,5 @@
-import React, { Component, PureComponent, ReactNode } from 'react';
-import { FlatList, View } from 'react-native';
+import React, { ReactNode } from 'react';
+import {FlatList, ListRenderItemInfo, View} from 'react-native';
 import ListItem from './ListItem';
 import styles from './style';
 
@@ -11,6 +11,8 @@ type Props<T> = {
   isEdit?: boolean;
 };
 
+const ITEM_HEIGHT = 70;
+
 function List<T>({ data, renderData, onEdit, onDelete }: Props<T>) {
   const renderSeparator = () => (
     <View style={styles.separatorViewStyle}>
@@ -21,8 +23,8 @@ function List<T>({ data, renderData, onEdit, onDelete }: Props<T>) {
   const handleEdit = (item: T, index: number) => () => onEdit(item, index);
   const handleDelete = (item: T, index: number) => () => onDelete(item, index);
 
-  const renderItem = (item: any, index: number) => (
-    <ListItem
+  const renderItem = ({ item, index }: ListRenderItemInfo<T>) => (
+    <ListItem<T>
       onEdit={handleEdit(item, index)}
       onDelete={handleDelete(item, index)}
       render={renderData}
@@ -32,12 +34,18 @@ function List<T>({ data, renderData, onEdit, onDelete }: Props<T>) {
 
   const keyExtractor = (item: any, index: number) =>
     item._id ? `${item._id}` : `${index}`;
+  const getItemLayout = (_: any, index: number) => ({
+    length: ITEM_HEIGHT,
+    offset: ITEM_HEIGHT * index,
+    index
+  });
 
   return (
     <FlatList
       data={data}
+      getItemLayout={getItemLayout}
       ItemSeparatorComponent={renderSeparator}
-      renderItem={({ item, index }) => renderItem(item, index)}
+      renderItem={renderItem}
       keyExtractor={keyExtractor}
     />
   );
