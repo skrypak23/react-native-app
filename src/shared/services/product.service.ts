@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 import IProduct from '../models/Product';
 import * as API from '../utils/api';
+import { findData } from '../utils';
 
 type TFetch = {
   url: string;
@@ -13,9 +14,16 @@ class ProductService {
   static createProduct(data: TData): Observable<IProduct> {
     return API.createData<IProduct>(data.url, data.body);
   }
-  static editProduct(data: TData): Observable<IProduct> {
-    const { price } = data.body;
-    return API.editData<IProduct>(data.url, { price } as IProduct);
+  static editProduct(
+    data: TData,
+    products: ReadonlyArray<IProduct>
+  ): Observable<IProduct> {
+    const foundProduct = findData(products, data.body._id);
+    if (foundProduct.name === data.body.name) {
+      const { price } = data.body;
+      return API.editData<IProduct>(data.url, { price } as IProduct);
+    }
+    return API.editData<IProduct>(data.url, data.body);
   }
   static deleteProduct(data: TFetch) {
     return API.deleteData<IProduct>(data.url);
