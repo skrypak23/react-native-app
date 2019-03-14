@@ -1,5 +1,5 @@
 import { ajax } from 'rxjs/ajax';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 const HOST = 'https://api.invoice-app.2muchcoffee.com/api';
