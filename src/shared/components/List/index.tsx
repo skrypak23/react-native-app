@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import {FlatList, ListRenderItemInfo, View} from 'react-native';
+import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import ListItem from './ListItem';
 import styles from './style';
 
