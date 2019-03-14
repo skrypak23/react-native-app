@@ -1,10 +1,13 @@
 import { StyleSheet } from 'react-native';
 
 const style = StyleSheet.create({
+  wrapper: {
+    marginBottom: 10
+  },
   item: {
     position: 'relative',
     height: 60,
-    width: '100%'
+    width: '100%',
   },
   error: {
     position: 'absolute',

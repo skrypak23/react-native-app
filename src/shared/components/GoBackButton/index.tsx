@@ -5,15 +5,10 @@ import styles from './style';
 
 type Props = {
   navigation: NavigationScreenProp<any, any>;
-  routeName: string;
 };
 
-const GoBackButton: FC<Props> = ({ navigation, routeName }) => (
-  <Button
-    onPress={() => navigation.navigate(routeName)}
-    transparent
-    style={styles.button}
-  >
+const GoBackButton: FC<Props> = ({ navigation }) => (
+  <Button onPress={() => navigation.goBack()} transparent style={styles.button}>
     <Icon name="md-arrow-round-back" />
   </Button>
 );

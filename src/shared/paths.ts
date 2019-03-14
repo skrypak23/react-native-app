@@ -2,6 +2,11 @@ enum Paths {
   Customers = 'Customers',
   Products = 'Products',
   Invoices = 'Invoices',
+
+  CustomerDrawer = 'CustomerDrawer',
+  ProductDrawer = 'ProductDrawer',
+  InvoiceDrawer = 'InvoiceDrawer',
+
   Detail = 'Detail',
   Drawer = 'Drawer',
   Form = 'Form',
