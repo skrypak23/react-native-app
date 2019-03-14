@@ -84,7 +84,7 @@ class BaseForm extends React.Component<Props> {
           </Form>
           <View style={styles.badgeWrapper}>
             <Badge info style={styles.badge}>
-              <Text style={styles.badgeText}>Total: {total}</Text>
+              <Text style={styles.badgeText}>Total: {total.toFixed(2)}</Text>
             </Badge>
           </View>
           <Button block primary onPress={handleSubmit(this.onSubmit)} disabled={!valid}>

@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 const style = StyleSheet.create({
   wrapper: {
-    marginBottom: 10
+    marginBottom: 10,
   },
   item: {
     position: 'relative',
@@ -11,7 +11,7 @@ const style = StyleSheet.create({
   },
   error: {
     position: 'absolute',
-    bottom: -15,
+    bottom: -18,
     left: 0,
     fontSize: 12,
     color: 'red',
