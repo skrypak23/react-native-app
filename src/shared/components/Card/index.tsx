@@ -1,12 +1,13 @@
 import React, { ReactNode } from 'react';
 import { CardItem } from 'native-base';
-import ForwardButton from '../ForwardButton';
 import { NavigationScreenProp } from 'react-navigation';
+
+import ForwardButton from '../ForwardButton';
 
 type Props<T> = {
   data: T;
   routeName: string;
-  navigation: NavigationScreenProp<any, any>;
+  navigation: NavigationScreenProp<any>;
   children: ReactNode;
 };
 function CardData<T>({ data, children, navigation, routeName }: Props<T>) {

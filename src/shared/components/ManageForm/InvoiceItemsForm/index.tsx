@@ -1,30 +1,31 @@
 import React, { Component } from 'react';
 import { Text } from 'react-native';
 import { connect } from 'react-redux';
+import { Dispatch, compose } from 'redux';
 import {
   Container,
   Content,
   Form,
   Button,
-  Card,
   CardItem,
   Picker as BasePicker
 } from 'native-base';
-import { InjectedFormProps, reduxForm, reset } from 'redux-form';
 import { NavigationScreenProp } from 'react-navigation';
-import { Dispatch, compose } from 'redux';
-import { RootAction, RootState } from '../../../../redux/store/types';
-import * as InvoiceItemActions from '../../../../redux/invoice-item/actions';
-import IInvoiceItem from '../../../models/InvoiceItem';
-import { InvoiceItemRequest } from '../../../../redux/request/actions';
-import { ID } from '../../../typing/records';
+import { InjectedFormProps, reduxForm, reset } from 'redux-form';
+
 import List from '../../List';
 import Picker from '../../../../shared/components/Picker';
-import IProduct from '../../../models/Product';
-import FormItem from '../../FormItem';
 import EditItemsForm from '../EditItemsForm';
+import FormItem from '../../FormItem';
+
+import { RootAction, RootState } from '../../../../redux/store/types';
+import IInvoiceItem from '../../../models/InvoiceItem';
+import IProduct from '../../../models/Product';
+import { InvoiceItemEntity, ProductEntity } from '../../../typing/state';
+import { InvoiceItemRequest } from '../../../../redux/request/actions';
+import * as InvoiceItemActions from '../../../../redux/invoice-item/actions';
+import { ID } from '../../../typing/records';
 import styles from './style';
-import { findData } from '../../../utils';
 
 const validate = (values: IInvoiceItem) => {
   const errors = {} as any;
@@ -38,17 +39,17 @@ const validate = (values: IInvoiceItem) => {
 };
 
 type TIndex = IInvoiceItem & {
-  index?: number;
+  index?: string;
 };
 
 type Props = InjectedFormProps & {
-  editInvoiceItem: (id: ID, invoice: IInvoiceItem) => void;
+  editInvoiceItem: (id: ID) => void;
   fillItem: (invoiceItem: TIndex) => void;
-  deleteInvoiceItemLocal: (index: number) => void;
+  deleteInvoiceItemLocal: (index: ID) => void;
   addInvoiceItem: (invoiceItem: IInvoiceItem) => void;
   navigation: NavigationScreenProp<any, any>;
-  invoiceItems: ReadonlyArray<IInvoiceItem>;
-  products: ReadonlyArray<IProduct>;
+  invoiceItems: InvoiceItemEntity;
+  products: ProductEntity;
   isEdit?: boolean;
   resetForm: () => void;
 };
@@ -64,20 +65,21 @@ class BaseForm extends Component<Props, State> {
     this.props.resetForm();
   };
 
-  handleDelete = (invoiceItem: IInvoiceItem, index?: number) =>
-    this.props.deleteInvoiceItemLocal(index as number);
-  handleEdit = (invoiceItem: IInvoiceItem, index?: number) => {
-    const quantity = Number(invoiceItem.quantity);
-    this.props.fillItem({ ...invoiceItem, quantity, index });
+  handleDelete = (id: ID) => this.props.deleteInvoiceItemLocal(id);
+  handleEdit = (id: ID) => {
+    const quantity = Number(this.props.invoiceItems.byId[id].quantity);
+    this.props.fillItem({ ...this.props.invoiceItems.byId[id], quantity, index: id });
     this.handleChangeVisible(true);
   };
 
-  renderItem = (invoiceItem: IInvoiceItem) => {
-    const foundProduct = findData<IProduct>(this.props.products, invoiceItem.product_id);
+  renderItem = (id: ID) => {
+    const { invoiceItems, products } = this.props;
+    const { product_id } = invoiceItems.byId[id];
+    const foundProduct = products.byId[product_id];
     return (
       <CardItem style={styles.cardItem}>
         <Text>Product: {foundProduct ? foundProduct.name : null}, </Text>
-        <Text>quantity: {invoiceItem.quantity}</Text>
+        <Text>quantity: {invoiceItems.byId[id].quantity}</Text>
       </CardItem>
     );
   };
@@ -91,11 +93,13 @@ class BaseForm extends Component<Props, State> {
         <Content padder>
           <Form style={styles.form}>
             <Picker name="product_id">
-              {products.map(product => (
+              {products.allIds.map(id => (
                 <BasePicker.Item
-                  key={product._id}
-                  label={`Name: ${product.name}, price - ${product.price}`}
-                  value={product._id}
+                  key={id}
+                  label={`Name: ${products.byId[id].name}, price - ${
+                    products.byId[id].price
+                  }`}
+                  value={id}
                 />
               ))}
             </Picker>
@@ -104,9 +108,9 @@ class BaseForm extends Component<Props, State> {
           <Button block primary onPress={handleSubmit(this.onSubmit)} disabled={!valid}>
             <Text style={styles.button}>Add</Text>
           </Button>
-          <List<IInvoiceItem>
+          <List<string>
             isEdit={true}
-            data={invoiceItems}
+            data={invoiceItems.allIds}
             onDelete={this.handleDelete}
             onEdit={this.handleEdit}
             renderData={this.renderItem}
@@ -130,7 +134,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
     dispatch(InvoiceItemActions.addInvoiceItem(invoiceItem)),
   editInvoiceItem: (id: number, invoice: IInvoiceItem) =>
     dispatch(InvoiceItemActions.editInvoiceItemLocal(id, invoice)),
-  deleteInvoiceItemLocal: (index: number) =>
+  deleteInvoiceItemLocal: (index: ID) =>
     dispatch(InvoiceItemActions.deleteInvoiceItemLocal(index)),
   fillItem: (invoiceItem: TIndex) =>
     dispatch(InvoiceItemRequest.Action.fillItem(invoiceItem)),

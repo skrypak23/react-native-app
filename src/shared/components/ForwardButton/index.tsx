@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { NavigationScreenProp } from 'react-navigation';
 import { Button, Icon } from 'native-base';
 import styles from './style';
 
 type Props<T> = {
-  navigation: NavigationScreenProp<any, any>;
+  navigation: NavigationScreenProp<any>;
   data: T;
   routeName: string;
 };

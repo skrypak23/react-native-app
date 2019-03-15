@@ -1,4 +1,4 @@
-import React, { memo, PureComponent, ReactNode } from 'react';
+import React, { PureComponent, ReactNode } from 'react';
 import Swipe from 'react-native-swipeout';
 import { Button, Card, Icon } from 'native-base';
 import styles from './style';

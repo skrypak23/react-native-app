@@ -1,19 +1,21 @@
 import React, { FC } from 'react';
-import { Text, View, Modal } from 'react-native';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { Text, View, Modal } from 'react-native';
 import { InjectedFormProps, reduxForm, reset } from 'redux-form';
 import { Picker as BasePicker, Button, Form, Icon } from 'native-base';
-import { RootAction, RootState } from '../../../../redux/store/types';
+
 import Picker from '../../Picker';
 import FormItem from '../../FormItem';
-import IProduct from '../../../models/Product';
+
+import { RootAction, RootState } from '../../../../redux/store/types';
+import { ProductEntity } from '../../../typing/state';
 import IInvoiceItem from '../../../models/InvoiceItem';
 import * as InvoiceItemAction from '../../../../redux/invoice-item/actions';
 import styles from './style';
 
 type Props = InjectedFormProps & {
-  products: ReadonlyArray<IProduct>;
+  products: ProductEntity;
   initialValues: IInvoiceItem;
   editLocal: (index: number, invoiceItem: IInvoiceItem) => void;
   editInvoiceItem: (index: number, invoiceItem: IInvoiceItem) => void;
@@ -58,11 +60,13 @@ const ItemsForm: FC<Props> = ({
       <View style={styles.container}>
         <Form>
           <Picker name="product_id">
-            {products.map(product => (
+            {products.allIds.map(id => (
               <BasePicker.Item
-                key={product._id}
-                label={`Name: ${product.name}, price - ${product.price}`}
-                value={product._id}
+                key={id}
+                label={`Name: ${products.byId[id].name}, price - ${
+                  products.byId[id].price
+                }`}
+                value={id}
               />
             ))}
           </Picker>

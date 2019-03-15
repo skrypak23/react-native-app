@@ -6,8 +6,8 @@ import styles from './style';
 type Props<T> = {
   data: ReadonlyArray<T>;
   renderData: (data: T) => ReactNode;
-  onEdit: (data: T, index?: number) => void;
-  onDelete: (data: T, index?: number) => void;
+  onEdit: (data: T) => void;
+  onDelete: (data: T) => void;
   isEdit?: boolean;
 };
 
@@ -20,20 +20,20 @@ function List<T>({ data, renderData, onEdit, onDelete }: Props<T>) {
     </View>
   );
 
-  const handleEdit = (item: T, index: number) => () => onEdit(item, index);
-  const handleDelete = (item: T, index: number) => () => onDelete(item, index);
+  const handleEdit = (item: T) => () => onEdit(item);
+  const handleDelete = (item: T) => () => onDelete(item);
 
-  const renderItem = ({ item, index }: ListRenderItemInfo<T>) => (
+  const renderItem = ({ item }: ListRenderItemInfo<T>) => (
     <ListItem<T>
-      onEdit={handleEdit(item, index)}
-      onDelete={handleDelete(item, index)}
+      onEdit={handleEdit(item)}
+      onDelete={handleDelete(item)}
       render={renderData}
       data={item}
     />
   );
 
   const keyExtractor = (item: any, index: number) =>
-    item._id ? `${item._id}` : `${index}`;
+    typeof item === 'string' ? item : `${index}`;
   const getItemLayout = (_: any, index: number) => ({
     length: ITEM_HEIGHT,
     offset: ITEM_HEIGHT * index,

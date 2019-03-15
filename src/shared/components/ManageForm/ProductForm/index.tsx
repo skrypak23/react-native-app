@@ -1,17 +1,19 @@
 import React, { FC } from 'react';
 import { Text } from 'react-native';
 import { connect } from 'react-redux';
+import { Dispatch, compose } from 'redux';
 import { Container, Content, Form, Button } from 'native-base';
 import { InjectedFormProps, reduxForm } from 'redux-form';
 import { NavigationScreenProp } from 'react-navigation';
-import { Dispatch, compose } from 'redux';
+
 import FormItem from '../../FormItem';
+
 import { RootAction, RootState } from '../../../../redux/store/types';
-import * as ProductActions from '../../../../redux/product/actions';
 import IProduct from '../../../models/Product';
+import * as ProductActions from '../../../../redux/product/actions';
 import PATHS from '../../../paths';
-import styles from './style';
 import { ID } from '../../../typing/records';
+import styles from './style';
 
 const validate = (values: IProduct) => {
   const errors = {} as any;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { connect } from 'react-redux';
+import { Dispatch, compose } from 'redux';
 import {
   Container,
   Content,
@@ -9,25 +10,26 @@ import {
   Picker as BasePicker,
   Badge
 } from 'native-base';
-import { initialize, InjectedFormProps, reduxForm, reset } from 'redux-form';
+import { initialize, InjectedFormProps, reduxForm } from 'redux-form';
 import { NavigationScreenProp } from 'react-navigation';
-import { Dispatch, compose } from 'redux';
+
 import FormItem from '../../FormItem';
-import { RootAction, RootState } from '../../../../redux/store/types';
-import * as InvoiceActions from '../../../../redux/invoice/actions';
-import IInvoice from '../../../models/Invoice';
-import PATHS from '../../../paths';
-import styles from './style';
-import { ID } from '../../../typing/records';
 import Picker from '../../Picker';
-import ICustomer from '../../../models/Customer';
+
+import { RootAction, RootState } from '../../../../redux/store/types';
+import { CustomerEntity } from '../../../typing/state';
+import IInvoice from '../../../models/Invoice';
+import * as InvoiceActions from '../../../../redux/invoice/actions';
+import PATHS from '../../../paths';
+import { ID } from '../../../typing/records';
+import styles from './style';
 
 const validate = (values: IInvoice) => {
   const errors = {} as any;
   if (!values.customer_id) {
     errors.customer_id = 'customer is required';
   }
-  if (!Number(values.discount)) {
+  if (!Number(values.discount) && Number(values.discount) !== 0) {
     errors.discount = 'discount is required';
   }
   if (+values.discount > 100) {
@@ -42,7 +44,7 @@ type Props = InjectedFormProps & {
   editInvoice: (id: ID, customer: IInvoice) => void;
   navigation: NavigationScreenProp<any, any>;
   initialValues: IInvoice | null;
-  customers: ReadonlyArray<ICustomer>;
+  customers: CustomerEntity;
   invoice: IInvoice;
 };
 
@@ -72,12 +74,8 @@ class BaseForm extends React.Component<Props> {
         <Content>
           <Form style={styles.form}>
             <Picker name="customer_id">
-              {customers.map(customer => (
-                <BasePicker.Item
-                  key={customer._id}
-                  label={customer.name}
-                  value={customer._id}
-                />
+              {customers.allIds.map(id => (
+                <BasePicker.Item key={id} label={customers.byId[id].name} value={id} />
               ))}
             </Picker>
             <FormItem name="discount" placeholder="Discount" type="decimal-pad" />
