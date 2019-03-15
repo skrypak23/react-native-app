@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
+import { Tab, Tabs } from 'native-base';
+import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { NavigationScreenProp } from 'react-navigation';
-import { Dispatch } from 'redux';
+
 import { InvoiceForm, InvoiceItemForm } from '../../../shared/components/ManageForm';
 import GoBackButton from '../../../shared/components/GoBackButton';
-import { Tab, Tabs } from 'native-base';
+
 import { RootAction } from '../../../redux/store/types';
+import { NavigationProps } from '../../../shared/typing/common';
 import { InvoiceRequest } from '../../../redux/request/actions';
 import * as ProductActions from '../../../redux/product/actions';
 import * as InvoiceItemActions from '../../../redux/invoice-item/actions';
 
 type TNavigation = {
-  navigation: NavigationScreenProp<any, any>;
+  navigation: NavigationScreenProp<NavigationProps>;
 };
 
 type Props = TNavigation & {

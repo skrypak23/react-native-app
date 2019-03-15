@@ -3,22 +3,25 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { NavigationScreenProp } from 'react-navigation';
 import { Container, Content, Text } from 'native-base';
+
 import BaseHeader from '../../../shared/components/Header';
+import RoundedButton from '../../../shared/components/RoundedButton';
+import CardData from '../../../shared/components/Card';
+import List from '../../../shared/components/List';
+
 import { RootAction, RootState } from '../../../redux/store/types';
+import IInvoice from '../../../shared/models/Invoice';
+import { InvoiceEntity } from '../../../shared/typing/state';
 import * as InvoiceActions from '../../../redux/invoice/actions';
 import * as InvoiceItemActions from '../../../redux/invoice-item/actions';
 import * as CustomerActions from '../../../redux/customer/actions';
-import IInvoice from '../../../shared/models/Invoice';
-import RoundedButton from '../../../shared/components/RoundedButton';
 import { ID } from '../../../shared/typing/records';
 import PATHS from '../../../shared/paths';
-import CardData from '../../../shared/components/Card';
-import List from '../../../shared/components/List';
 
 type Props = {
   navigation: NavigationScreenProp<any, any>;
   fetchAllInvoices: () => void;
-  invoices: ReadonlyArray<IInvoice>;
+  invoices: InvoiceEntity;
   deleteInvoice: (id: ID) => void;
   fetchCustomers: () => void;
   fetchInvoice: (id: ID) => void;
@@ -32,24 +35,24 @@ class InvoiceScreen extends Component<Props> {
     this.props.fetchCustomers();
   }
 
-  renderItem = (invoice: IInvoice) => {
-    const { navigation } = this.props;
+  renderItem = (id: ID) => {
+    const { navigation, invoices } = this.props;
     return (
       <CardData<IInvoice>
-        data={invoice}
+        data={invoices.byId[id]}
         routeName={PATHS.InvoiceDetail}
         navigation={navigation}
       >
-        <Text>ID: {invoice._id}</Text>
+        <Text>ID: {id}</Text>
       </CardData>
     );
   };
 
-  handleDeleteInvoice = (invoice: IInvoice) => this.props.deleteInvoice(invoice._id);
-  handleEditInvoice = (invoice: IInvoice) => {
+  handleDeleteInvoice = (id: ID) => this.props.deleteInvoice(id);
+  handleEditInvoice = (id: ID) => {
     const { fetchInvoice, fetchAllInvoiceItems, navigation } = this.props;
-    fetchInvoice(invoice._id);
-    fetchAllInvoiceItems(invoice._id);
+    fetchInvoice(id);
+    fetchAllInvoiceItems(id);
     navigation.navigate(PATHS.InvoiceForm, { isEdit: true });
   };
   handlePressButton = () => this.props.navigation.navigate(PATHS.InvoiceForm);
@@ -60,8 +63,8 @@ class InvoiceScreen extends Component<Props> {
       <Container>
         <BaseHeader title="Invoices" navigation={navigation} />
         <Content padder>
-          <List<IInvoice>
-            data={invoices}
+          <List<string>
+            data={invoices.allIds}
             renderData={this.renderItem}
             onEdit={this.handleEditInvoice}
             onDelete={this.handleDeleteInvoice}

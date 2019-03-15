@@ -1,47 +1,51 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { NavigationScreenProp } from 'react-navigation';
 import { Text } from 'react-native';
 import { Dispatch } from 'redux';
 import { Card, CardItem, Container, Content, Tab, Tabs } from 'native-base';
+
 import GoBackButton from '../../../shared/components/GoBackButton';
+
+import { RootAction, RootState } from '../../../redux/store/types';
 import IInvoice from '../../../shared/models/Invoice';
 import IInvoiceItem from '../../../shared/models/InvoiceItem';
+import {
+  CustomerEntity,
+  InvoiceItemEntity,
+  ProductEntity
+} from '../../../shared/typing/state';
 import * as InvoiceItemActions from '../../../redux/invoice-item/actions';
 import * as CustomerActions from '../../../redux/customer/actions';
 import * as ProductActions from '../../../redux/product/actions';
-import { RootAction, RootState } from '../../../redux/store/types';
 import { ID } from '../../../shared/typing/records';
-import { findData } from '../../../shared/utils';
-import ICustomer from '../../../shared/models/Customer';
-import IProduct from '../../../shared/models/Product';
 
 type TNavigation = {
   navigation: NavigationScreenProp<any, any>;
 };
 
 type Props = TNavigation & {
-  customers: ReadonlyArray<ICustomer>;
-  products: ReadonlyArray<IProduct>;
-  invoiceItems: ReadonlyArray<IInvoiceItem>;
+  customers: CustomerEntity;
+  products: ProductEntity;
+  invoiceItems: InvoiceItemEntity;
   fetchAllCustomers: () => void;
   fetchAllProducts: () => void;
   resetItems: () => void;
   fetchAllInvoiceItems: (invoiceId: ID) => void;
 };
 
-class Detail extends Component<Props> {
+class Detail extends PureComponent<Props> {
   static navigationOptions = ({ navigation }: TNavigation) => ({
     title: 'Invoice Details',
     headerLeft: <GoBackButton navigation={navigation} />
   });
 
   componentDidMount() {
-    this.props.resetItems();
     const invoice = this.props.navigation.getParam('data');
+    invoice && this.props.fetchAllInvoiceItems(invoice._id);
+    this.props.resetItems();
     this.props.fetchAllCustomers();
     this.props.fetchAllProducts();
-    invoice && this.props.fetchAllInvoiceItems(invoice._id);
   }
 
   renderInvoiceTab = (invoice: IInvoice | null) =>
@@ -50,9 +54,7 @@ class Detail extends Component<Props> {
         <Content padder>
           <Card>
             <CardItem header bordered>
-              <Text>
-                Customer: {findData(this.props.customers, invoice.customer_id).name}
-              </Text>
+              <Text>Customer: {this.props.customers.byId[invoice.customer_id].name}</Text>
             </CardItem>
             <CardItem header bordered>
               <Text>Discount: {invoice.discount || 0}</Text>
@@ -65,25 +67,28 @@ class Detail extends Component<Props> {
       </Tab>
     ) : null;
 
-  renderInvoiceItemsTab = (invoiceItems: ReadonlyArray<IInvoiceItem> | null) =>
+  renderInvoiceItemsTab = (invoiceItems: InvoiceItemEntity) =>
     invoiceItems ? (
       <Tab heading="Invoice Items">
         <Content padder>
-          {invoiceItems.map((item, idx) => (
-            <Card key={`${item._id}-${idx}`}>
-              <CardItem>
-                <Text>Invoice ID: {item.invoice_id}</Text>
-              </CardItem>
-              <CardItem>
-                <Text>
-                  Product: {findData(this.props.products, item.product_id).name}
-                </Text>
-              </CardItem>
-              <CardItem>
-                <Text>Quantity: {item.quantity}</Text>
-              </CardItem>
-            </Card>
-          ))}
+          {invoiceItems.allIds.map((id, idx) => {
+            const { products } = this.props;
+            const item = invoiceItems.byId[id];
+            const product = products.byId[item.product_id];
+            return (
+              <Card key={`${id}-${idx}`}>
+                <CardItem>
+                  <Text>Invoice ID: {item.invoice_id}</Text>
+                </CardItem>
+                <CardItem>
+                  <Text>Product: {product ? product.name : null}</Text>
+                </CardItem>
+                <CardItem>
+                  <Text>Quantity: {item.quantity}</Text>
+                </CardItem>
+              </Card>
+            );
+          })}
         </Content>
       </Tab>
     ) : null;

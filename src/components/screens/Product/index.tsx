@@ -3,20 +3,23 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { NavigationScreenProp } from 'react-navigation';
 import { Container, Content, Text } from 'native-base';
+
 import BaseHeader from '../../../shared/components/Header';
-import { RootAction, RootState } from '../../../redux/store/types';
 import List from '../../../shared/components/List';
 import RoundedButton from '../../../shared/components/RoundedButton';
-import * as ProductActions from '../../../redux/product/actions';
+import CardData from '../../../shared/components/Card';
+
+import { RootAction, RootState } from '../../../redux/store/types';
+import { ProductEntity } from '../../../shared/typing/state';
 import IProduct from '../../../shared/models/Product';
 import { ID } from '../../../shared/typing/records';
+import * as ProductActions from '../../../redux/product/actions';
 import PATHS from '../../../shared/paths';
-import CardData from '../../../shared/components/Card';
 
 type Props = {
   navigation: NavigationScreenProp<any, any>;
   fetchAllProducts: () => void;
-  products: ReadonlyArray<IProduct>;
+  products: ProductEntity;
   deleteProduct: (id: ID) => void;
   fetchProduct: (id: ID) => void;
   resetForm: () => void;
@@ -28,23 +31,23 @@ class ProductScreen extends Component<Props> {
     this.props.fetchAllProducts();
   }
 
-  renderItem = (product: IProduct) => {
-    const { navigation } = this.props;
-    return product ? (
+  renderItem = (id: ID) => {
+    const { navigation, products } = this.props;
+    return (
       <CardData<IProduct>
-        data={product}
+        data={products.byId[id]}
         navigation={navigation}
         routeName={PATHS.ProductDetail}
       >
-        <Text>{product.name}</Text>
+        <Text>{products.byId[id].name}</Text>
       </CardData>
-    ) : null;
+    );
   };
 
-  handleDeleteProduct = (product: IProduct) => this.props.deleteProduct(product._id);
-  handleEditProduct = (product: IProduct) => {
+  handleDeleteProduct = (id: ID) => this.props.deleteProduct(id);
+  handleEditProduct = (id: ID) => {
     const { fetchProduct, navigation } = this.props;
-    fetchProduct(product._id);
+    fetchProduct(id);
     navigation.navigate(PATHS.ProductForm, { isEdit: true });
   };
   handlePressButton = () => {
@@ -59,8 +62,8 @@ class ProductScreen extends Component<Props> {
       <Container>
         <BaseHeader title="Products" navigation={navigation} />
         <Content padder>
-          <List<IProduct>
-            data={products}
+          <List<string>
+            data={products.allIds}
             renderData={this.renderItem}
             onEdit={this.handleEditProduct}
             onDelete={this.handleDeleteProduct}

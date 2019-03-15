@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { NavigationScreenProp } from 'react-navigation';
+
 import { CustomerForm } from '../../../shared/components/ManageForm';
 import GoBackButton from '../../../shared/components/GoBackButton';
 
+import {NavigationProps} from "../../../shared/typing/common";
+
 type TNavigation = {
-  navigation: NavigationScreenProp<any, any>;
+  navigation: NavigationScreenProp<NavigationProps>;
 };
 
 type Props = TNavigation & {};

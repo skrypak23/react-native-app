@@ -3,20 +3,23 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { NavigationScreenProp } from 'react-navigation';
 import { Container, Content, Text } from 'native-base';
+
 import BaseHeader from '../../../shared/components/Header';
-import { RootAction, RootState } from '../../../redux/store/types';
-import * as CustomerActions from '../../../redux/customer/actions';
-import ICustomer from '../../../shared/models/Customer';
 import List from '../../../shared/components/List';
 import RoundedButton from '../../../shared/components/RoundedButton';
+import CardData from '../../../shared/components/Card';
+
+import { RootAction, RootState } from '../../../redux/store/types';
+import { CustomerEntity } from '../../../shared/typing/state';
+import ICustomer from '../../../shared/models/Customer';
+import * as CustomerActions from '../../../redux/customer/actions';
 import { ID } from '../../../shared/typing/records';
 import PATHS from '../../../shared/paths';
-import CardData from '../../../shared/components/Card';
 
 type Props = {
   navigation: NavigationScreenProp<any, any>;
   fetchAllCustomers: () => void;
-  customers: ReadonlyArray<ICustomer>;
+  customers: CustomerEntity;
   deleteCustomer: (id: ID) => void;
   fetchCustomer: (id: ID) => void;
   resetForm: () => void;
@@ -28,8 +31,9 @@ class CustomerScreen extends Component<Props> {
     this.props.fetchAllCustomers();
   }
 
-  renderItem = (customer: ICustomer) => {
-    const { navigation } = this.props;
+  renderItem = (id: ID) => {
+    const { navigation, customers } = this.props;
+    const customer = customers.byId[id];
     return (
       <CardData<ICustomer>
         data={customer}
@@ -41,10 +45,10 @@ class CustomerScreen extends Component<Props> {
     );
   };
 
-  handleDeleteCustomer = (customer: ICustomer) => this.props.deleteCustomer(customer._id);
-  handleEditCustomer = (customer: ICustomer) => {
+  handleDeleteCustomer = (id: ID) => this.props.deleteCustomer(id);
+  handleEditCustomer = (id: ID) => {
     const { fetchCustomer, navigation } = this.props;
-    fetchCustomer(customer._id);
+    fetchCustomer(id);
     navigation.navigate(PATHS.CustomerForm, { isEdit: true });
   };
   handlePressButton = () => {
@@ -59,8 +63,8 @@ class CustomerScreen extends Component<Props> {
       <Container>
         <BaseHeader title="Customers" navigation={navigation} />
         <Content padder>
-          <List<ICustomer>
-            data={customers}
+          <List<string>
+            data={customers.allIds}
             renderData={this.renderItem}
             onEdit={this.handleEditCustomer}
             onDelete={this.handleDeleteCustomer}
@@ -72,7 +76,9 @@ class CustomerScreen extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state: RootState) => ({ customers: state.customer.entities });
+const mapStateToProps = (state: RootState) => ({
+  customers: state.customer.entities
+});
 const mapDispatchToProps = (dispatch: Dispatch<RootAction>) => ({
   fetchAllCustomers: () => dispatch(CustomerActions.fetchCustomers()),
   deleteCustomer: (id: ID) => dispatch(CustomerActions.deleteCustomer(id)),
