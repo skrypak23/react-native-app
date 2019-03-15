@@ -1,23 +1,20 @@
-import { ActionType } from 'typesafe-actions';
-import * as InvoiceActions from '../actions';
-import * as INVOICE_TYPES from '../actions/types';
-import { State, initialState } from '../states';
 import IInvoice from '../../../shared/models/Invoice';
-import { union, deleteData } from '../../../shared/utils';
+import * as INVOICE_TYPES from '../actions/types';
 
-type Action = ActionType<typeof InvoiceActions>;
+import { State, initialState, Action } from '../states';
+import { deleteEntity, mapEntity } from '../../../shared/utils';
 
 const reducer = (state: State = initialState, action: Action): State => {
   switch (action.type) {
     case INVOICE_TYPES.SET_INVOICE_DATA: {
-      const entities = union<IInvoice>(action.payload, state.entities);
+      const entities = mapEntity<IInvoice>(state.entities, action.payload);
       return {
         ...state,
         entities
       };
     }
     case INVOICE_TYPES.DELETE_INVOICE_DATA: {
-      const entities = deleteData<IInvoice>(action.payload, state.entities);
+      const entities = deleteEntity<IInvoice>(action.payload._id, state.entities);
       return {
         ...state,
         entities

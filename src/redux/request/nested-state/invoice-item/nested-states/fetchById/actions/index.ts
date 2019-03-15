@@ -12,7 +12,7 @@ export enum FetchInvoiceItemByIdTypes {
 }
 
 type TIndex = IInvoiceItem & {
-  index?: number;
+  index?: string;
 };
 
 export const FetchInvoiceItemByIdActions = {

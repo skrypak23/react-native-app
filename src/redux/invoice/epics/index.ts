@@ -1,5 +1,5 @@
 import { isOfType } from 'typesafe-actions';
-import { filter, map, skipWhile, takeWhile, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { Epic } from 'redux-observable';
 import { RootAction, RootState } from '../../store/types';
 import * as INVOICE_ITEMS_TYPES from '../../invoice-item/actions/types';
@@ -29,7 +29,11 @@ const calculateTotalEpic: Epic<RootAction, RootAction, RootState> = (action$, st
       if (form.invoice) {
         const invoice = form.invoice.values;
         const discount = invoice && invoice.discount ? invoice.discount : 0;
-        return calculateTotal(discount, invoiceItem.entities, product.entities);
+        return calculateTotal(
+          discount,
+          Object.values(invoiceItem.entities.byId),
+          Object.values(product.entities.byId)
+        );
       }
       return -1;
     }),

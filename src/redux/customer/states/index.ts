@@ -1,9 +1,16 @@
-import ICustomer from "../../../shared/models/Customer";
+import {ActionType} from "typesafe-actions";
+import { CustomerEntity } from '../../../shared/typing/state';
+import * as CustomerActions from '../actions';
+
+export type Action = ActionType<typeof CustomerActions>;
 
 export type State = {
-    entities: ReadonlyArray<ICustomer>;
+  entities: CustomerEntity;
 };
 
 export const initialState: State = {
-    entities: []
+  entities: {
+    byId: {},
+    allIds: []
+  }
 };

@@ -1,22 +1,19 @@
-import { ActionType } from 'typesafe-actions';
-import * as ProductActions from '../actions';
-import * as PRODUCT_TYPES from '../actions/types';
-import { State, initialState } from '../states';
 import IProduct from '../../../shared/models/Product';
-import { union, deleteData } from '../../../shared/utils';
+import * as PRODUCT_TYPES from '../actions/types';
 
-type Action = ActionType<typeof ProductActions>;
+import { State, initialState, Action } from '../states';
+import { mapEntity, deleteEntity } from '../../../shared/utils';
 
 const reducer = (state: State = initialState, action: Action): State => {
   switch (action.type) {
     case PRODUCT_TYPES.SET_PRODUCT_DATA:
-      const entities = union<IProduct>(action.payload, state.entities);
+      const entities = mapEntity<IProduct>(state.entities, action.payload);
       return {
         ...state,
         entities
       };
     case PRODUCT_TYPES.DELETE_PRODUCT_DATA: {
-      const entities = deleteData<IProduct>(action.payload, state.entities);
+      const entities = deleteEntity<IProduct>(action.payload._id, state.entities);
       return {
         ...state,
         entities

@@ -8,10 +8,10 @@ export const setInvoiceItemData = createStandardAction(
 )<IInvoiceItem[]>();
 
 export const deleteInvoiceItemData = createStandardAction(
-  INVOICE_ITEMS_TYPES.DELETE_INVOICE_ITEM_LOCAL
+  INVOICE_ITEMS_TYPES.DELETE_FETCHED_INVOICE_ITEM
 )<IInvoiceItem>();
 
-export const deleteInvoiceItemLocal = (id: number) =>
+export const deleteInvoiceItemLocal = (id: string) =>
   action(INVOICE_ITEMS_TYPES.DELETE_INVOICE_ITEM_LOCAL, id);
 
 export const resetInvoiceItems = createStandardAction(
