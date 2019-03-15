@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import ICustomer from '../models/Customer';
 import * as API from '../utils/api';
-import { findData } from '../utils';
+import {CustomerEntity} from "../typing/state";
 
 type TFetch = {
   url: string;
@@ -16,9 +16,9 @@ class CustomerService {
   }
   static editCustomer(
     data: TData,
-    customers: ReadonlyArray<ICustomer>
+    customers: CustomerEntity
   ): Observable<ICustomer> {
-    const foundCustomer = findData(customers, data.body._id);
+    const foundCustomer = customers.byId[data.body._id];
     if (foundCustomer.name === data.body.name) {
       const { phone, address } = data.body;
       return API.editData<ICustomer>(data.url, { phone, address } as ICustomer);
